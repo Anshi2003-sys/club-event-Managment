@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About VibeHub</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS -->
+    <style>
+
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+
+        /* Navbar */
+      .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+
+   
+        .about-section {
+            text-align: center;
+            padding: 80px 20px;
+            background: #ffffff;
+        }
+        .about-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .about-section p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px 20px;
+        }
+        .feature-card {
+            background: #fff;
+            padding: 20px;
+            width: 250px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(162, 20, 157, 0.023);
+        }
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+       
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+
+
+     <!-- About Section -->
+    <div class="about-section">
+        <h1>About Campus Connect  </h1>
+        <p>VibeHub is a platform designed to bring campus events and clubs together. Our goal is to provide students with easy access to all events, clubs, and activities happening on campus, making student life more engaging and interactive.</p>
+        <p>From cultural fests to tech workshops, VibeHub ensures you never miss out on an exciting opportunity to connect, learn, and grow with your peers.</p>
+    </div>
+
+    <!-- Features / Mission Section -->
+    <div class="features">
+        <div class="feature-card">
+            <h3>Explore Events</h3>
+            <p>Discover all campus events in one place, with detailed schedules and descriptions.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Join Clubs</h3>
+            <p>Find and join clubs that match your interests and passions.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Stay Updated</h3>
+            <p>Receive notifications and updates for events and club activities.</p>
+        </div>
+    </div>
+
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
+    

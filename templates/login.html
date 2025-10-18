@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Registration</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* RESET + FONT */
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+
+    body {
+      background: linear-gradient(to right, #e6f0ff, #ffffff);
+    }
+
+    /* Navbar */
+      .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+
+    /* LOGIN CONTAINER */
+    .container {
+      width: 920px;
+      height: 490px;
+      background: #fff;
+      box-shadow: 0 10px 34px rgb(94, 191, 97);
+      border-radius: 20px;
+      display: flex;
+      overflow: hidden;
+      transition: 0.6s ease-in-out;
+      margin: 50px auto; /* center below navbar */
+    }
+
+    .forms-container { width: 50%; padding: 40px; display:flex; justify-content:center; align-items:center; }
+    .signin-signup { width:100%; }
+
+    form { display:flex; flex-direction:column; width:100%; }
+    form h2 { margin-bottom:20px; font-size:28px; color:black; text-align:left; }
+    .input-field { position:relative; margin:10px 0; }
+    .input-field i { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#555; }
+    .input-field input { width:100%; padding:12px 12px 12px 40px; border:1px solid #ccc; border-radius:8px; font-size:16px; outline:none; }
+    .input-field input:focus { border-color:rgb(94,191,97); box-shadow:0 0 5px rgba(94,191,97,0.4); }
+    form button { margin-top:15px; padding:12px; border:none; border-radius:8px; background: rgb(94,191,97); color:black; font-size:16px; cursor:pointer; transition:0.3s; }
+    form button:hover { background: rgb(94,191,97); color:white; }
+
+    .forgot { text-decoration:none; font-size:14px; color:black; margin-top:8px; text-align:right; display:block; }
+    .social-text { margin:15px 0; font-size:14px; color:#555; text-align:center; }
+    .social-media { display:flex; justify-content:center; gap:10px; }
+    .social-media a { width:40px; height:40px; border:1px solid #ccc; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#333; font-size:18px; text-decoration:none; transition:0.3s; }
+    .social-media a:hover { background:rgb(94,191,97); color:black; }
+
+    .panels-container { width:50%; background: rgb(94,191,97); color:black; text-align:center; display:flex; align-items:center; justify-content:center; padding:40px; position:relative; transition:0.6s ease-in-out; }
+    .panel-content h3 { font-size:24px; margin-bottom:10px; }
+    .panel-content p { font-size:14px; margin-bottom:20px; }
+    .panel-content button { background:transparent; border:2px solid black; font-size:16px; color:black; padding:10px 20px; border-radius:8px; cursor:pointer; transition:0.3s; }
+    .panel-content button:hover { background:#fff; color: rgb(94,191,97); }
+
+    .container.sign-up-mode .forms-container { order:2; }
+    .container.sign-up-mode .panels-container { order:1; }
+
+    .flash { text-align:center; margin-bottom:10px; padding:8px; border-radius:5px; }
+    .flash-success { background: #d4edda; color: #155724; }
+    .flash-danger { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+
+ <!-- Navbar -->
+    <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+  <!-- LOGIN / REGISTER CONTAINER -->
+  <div class="container" id="container">
+    <div class="forms-container">
+      <div class="signin-signup">
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- LOGIN FORM -->
+        <form action="{{ url_for('login') }}" method="POST" class="sign-in-form">
+          <h2>Login</h2>
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required>
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required>
+          </div>
+          <a href="#" class="forgot">Forgot Password?</a>
+          <button type="submit">Login</button>
+          <p class="social-text">Or login with social platforms</p>
+          <div class="social-media">
+            <a href="#"><i class="fab fa-google"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form action="{{ url_for('register') }}" method="POST" class="sign-up-form">
+          <h2>Registration</h2>
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required>
+          </div>
+          <div class="input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" placeholder="Email" required>
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required>
+          </div>
+          <button type="submit">Register</button>
+          <p class="social-text">Or register with social platforms</p>
+          <div class="social-media">
+            <a href="#"><i class="fab fa-google"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel-content" id="panel-content">
+        <h3>Hello, Welcome!</h3>
+        <p>Don’t have an account?</p>
+        <button id="toggleBtn">Register</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const container = document.getElementById('container');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const signInForm = document.querySelector('.sign-in-form');
+  const signUpForm = document.querySelector('.sign-up-form');
+  const panelContent = document.getElementById('panel-content');
+
+  toggleBtn.addEventListener('click', () => {
+    if (container.classList.contains('sign-up-mode')) {
+      container.classList.remove('sign-up-mode');
+      signInForm.style.display = 'flex';
+      signUpForm.style.display = 'none';
+      panelContent.innerHTML = `
+        <h3>Hello, Welcome!</h3>
+        <p>Don’t have an account?</p>
+        <button id="toggleBtn">Register</button>
+      `;
+    } else {
+      container.classList.add('sign-up-mode');
+      signInForm.style.display = 'none';
+      signUpForm.style.display = 'flex';
+      panelContent.innerHTML = `
+        <h3>Welcome Back!</h3>
+        <p>Already have an account?</p>
+        <button id="toggleBtn">Login</button>
+      `;
+    }
+    document.getElementById('toggleBtn').addEventListener('click', () => toggleBtn.click());
+  });
+
+  // initial state
+  signUpForm.style.display = 'none';
+</script>
+
+
+ <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Club - Campus Connect</title>
+  <style>
+     body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+
+    /* Navbar */
+       .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+
+    .container { text-align:center; margin:30px auto; max-width:800px; }
+    .container h1 { font-size:36px; margin-bottom:10px; color:#222; }
+    .container p { font-size:18px; color:#555; margin-bottom:30px; }
+    .form-container { background:rgb(94, 191, 97); padding:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:left; }
+    .form-container h2 { margin-bottom:20px; color:#222; text-align:center; }
+    label { display:block; margin-bottom:8px; font-weight:bold; color:#fff; }
+    select, input, textarea { width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
+    .form-container button { width:100%; padding:12px; border:none; background:#28a745; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
+    .form-container button:hover { background:#1e7e34; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    table, th, td { border:1px solid #ccc; }
+    th, td { padding:10px; text-align:center; }
+    th { background:#5ebf61; color:white; }
+    .btn-edit { background:orange; color:white; padding:5px 10px; border-radius:4px; text-decoration:none; }
+    .btn-delete { background:red; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; }
+  </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+
+  <div class="container">
+    <h1>Join a Club</h1>
+    <p>Fill the form below to join your favorite club.</p>
+
+    <div class="form-container">
+      <h2>Fill the form to join the Club</h2>
+
+      {% if success_message %}
+        <p style="color:white; background:green; padding:10px; border-radius:5px; text-align:center;">
+          {{ success_message }}
+        </p>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('join_club') }}">
+        <label for="club">Select Club:</label>
+        <select name="club" id="club" required>
+          <option value="">-- Choose a Club --</option>
+          <option value="Literature">Literature Club</option>
+          <option value="Cultural">Cultural Club</option>
+          <option value="Red Ribbon">Red Ribbon Club</option>
+          <option value="Chess">Chess Club</option>
+          <option value="Adventure">Adventure Club</option>
+        </select>
+
+        <label for="members">Number of Members:</label>
+        <input type="number" name="members" id="members" min="1" required>
+
+        <label for="group_name">Name of Your Group:</label>
+        <input type="text" name="group_name" id="group_name" required>
+
+        <label for="reason">Why do you want to join?</label>
+        <textarea name="reason" id="reason" rows="3" required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    {% if groups %}
+    <div style="margin-top:30px; text-align:left;">
+      <h2>Your Groups</h2>
+      <table>
+        <tr>
+          <th>Club</th>
+          <th>Members</th>
+          <th>Group Name</th>
+          <th>Reason</th>
+          <th>Joined At</th>
+          <th>Actions</th>
+        </tr>
+        {% for group in groups %}
+        <tr>
+          <td>{{ group.club }}</td>
+          <td>{{ group.members }}</td>
+          <td>{{ group.group_name }}</td>
+          <td>{{ group.reason }}</td>
+          <td>{{ group.joined_at }}</td>
+          <td>
+            <a href="{{ url_for('edit_club', id=group.id) }}" class="btn-edit">Edit</a>
+            <form method="POST" action="{{ url_for('delete_club', id=group.id) }}" style="display:inline;">
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endif %}
+  </div>
+
+
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
+</body>
+</html>

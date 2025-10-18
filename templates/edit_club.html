@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Club - Campus Connect</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e6f0ff, #ffffff);
+    }
+    .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+    .container { text-align:center; margin:30px auto; max-width:700px; }
+    .container h1 { font-size:32px; margin-bottom:10px; color:#222; }
+    .form-container { background:rgb(94, 191, 97); padding:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:left; }
+    .form-container h2 { margin-bottom:20px; color:#222; text-align:center; }
+    label { display:block; margin-bottom:8px; font-weight:bold; color:#fff; }
+    select, input, textarea { width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
+    .form-container button { width:100%; padding:12px; border:none; background:#007bff; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
+    .form-container button:hover { background:#0056b3; }
+    .btn-back { display:inline-block; margin-top:15px; padding:10px 20px; background:#6c757d; color:white; border-radius:5px; text-decoration:none; }
+    .btn-back:hover { background:#5a6268; }
+  </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+  
+
+
+  <div class="container">
+    <h1>Edit Club Registration</h1>
+    <div class="form-container">
+      <h2>Update Your Club Details</h2>
+
+      <form method="POST">
+        <label for="club">Select Club:</label>
+        <select name="club" id="club" required>
+          <option value="Literature" {% if group['club'] == 'Literature' %}selected{% endif %}> Literature Club</option>
+          <option value="Cultural" {% if group['club'] == 'Cultural' %}selected{% endif %}>Cultural Club</option>
+          <option value="Red Ribbon" {% if group['club'] == 'RedRibbon' %}selected{% endif %}>Red Ribbon Club</option>
+          <option value="Chess" {% if group['club'] == 'Chess' %}selected{% endif %}>Chess Club</option>
+          <option value="Adventure" {% if group['club'] == 'Adventure' %}selected{% endif %}>Adventure Club</option>
+        </select>
+
+        <label for="members">Number of Members:</label>
+        <input type="number" name="members" id="members" value="{{ group['members'] }}" required>
+
+        <label for="group_name">Name of Your Group:</label>
+        <input type="text" name="group_name" id="group_name" value="{{ group['group_name'] }}" required>
+
+        <label for="reason">Why do you want to join?</label>
+        <textarea name="reason" id="reason" rows="3" required>{{ group['reason'] }}</textarea>
+
+        <button type="submit">Update</button>
+      </form>
+
+      <a href="{{ url_for('join_club') }}" class="btn-back">← Back to Clubs</a>
+    </div>
+  </div>
+
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
+</body>
+</html>

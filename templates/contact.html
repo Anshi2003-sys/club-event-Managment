@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help & Support | Campus Connect</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f0f7ff;
+      margin: 0;
+      padding: 0;
+    }
+     .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 70px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #004b23;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #333;
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    button {
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #256d47;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 15px;
+    }
+
+
+
+
+    /* Popup Modal Styling */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.popup.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 15px;
+  padding: 30px 40px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.popup-content h3 {
+  margin-top: 15px;
+  color: #004b23;
+  font-size: 18px;
+}
+
+.popup-content p {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.popup-content button {
+  background-color: #2e8b57;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.popup-content button:hover {
+  background-color: #256d47;
+}
+
+.tick {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #2e8b57;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  color: white;
+  font-size: 30px;
+}
+
+  </style>
+</head>
+<body>
+
+    <!--Navbar-->
+  <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+
+
+
+  <div class="container">
+    <h2>Help & Support</h2>
+    <p>Facing an issue or have a question? Submit your query and our team will get back to you soon.</p>
+
+    <form id="supportForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Your name" required>
+
+      <label for="email">Email / Roll Number</label>
+      <input type="email" id="email" placeholder="example@college.edu" required>
+
+      <label for="category">Issue Category</label>
+      <select id="category" required>
+        <option value="">-- Select Issue Type --</option>
+        <option>Event Registration Issue</option>
+        <option>Curriculum / Syllabus Query</option>
+        <option>Technical Error</option>
+        <option>Other</option>
+      </select>
+
+      <label for="message">Describe Your Issue</label>
+      <textarea id="message" placeholder="Write details about your issue..." required></textarea>
+
+      <button type="submit">Submit Ticket</button>
+    </form>
+
+    <div class="note">
+      We typically respond within 24–48 hours.
+    </div>
+  </div>
+
+ <!-- Popup Modal -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <div class="tick">✓</div>
+    <h3>Thank You!</h3>
+    <p>We’ve received your message and will get back to you within a few hours.</p>
+    <button id="closePopup">OK</button>
+  </div>
+</div>
+
+<script>
+
+   /*  // Form submission popup
+    document.getElementById("supportForm").addEventListener("submit", function (e) {
+      e.preventDefault(); // prevent actual form submission
+      alert("✅ Thank you! We’ll get back to you within a few hours.");
+      this.reset(); // clear the form after submission
+    }); */
+
+const form = document.getElementById("supportForm");
+const popup = document.getElementById("popup");
+const closePopup = document.getElementById("closePopup");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  popup.classList.add("active");
+  form.reset();
+});
+
+closePopup.addEventListener("click", function () {
+  popup.classList.remove("active");
+});
+
+  </script>
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
+
+
+</body>
+</html>
