@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Campus Connect</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e6f0ff, #ffffff);
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    th {
+      background: rgb(94, 191, 97);
+      color: white;
+    }
+    .section {
+      margin-bottom: 50px;
+    }
+    .navbar {
+      background-color: rgb(94, 191, 97);
+      padding: 15px 30px;
+      width:100vw;
+      margin-left: -80px;
+      margin-top: -20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      margin-left: 1150px;
+      
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <!-- <a href="{{ url_for('index') }}">🏠 Home</a> -->
+    <a href="{{ url_for('logout') }}">🚪 Logout</a>
+  </div>
+
+  <h1>Admin Dashboard</h1>
+
+  <div class="section">
+    <h2>📅 Booked Events</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Event Name</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Duration (hrs)</th>
+        <th>Participants</th>
+      </tr>
+      {% for event in book_events %}
+      <tr>
+        <td>{{ event['id'] }}</td>
+        <td>{{ event['event_name'] }}</td>
+        <td>{{ event['event_date'] }}</td>
+        <td>{{ event['event_time'] }}</td>
+        <td>{{ event['duration'] }}</td>
+        <td>{{ event['participants'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🤝 Joined Clubs</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Club</th>
+        <th>Members</th>
+        <th>Group Name</th>
+        <th>Reason</th>
+        <th>Joined At</th>
+      </tr>
+      {% for club in club_joins %}
+      <tr>
+        <td>{{ club['id'] }}</td>
+        <td>{{ club['club'] }}</td>
+        <td>{{ club['members'] }}</td>
+        <td>{{ club['group_name'] }}</td>
+        <td>{{ club['reason'] }}</td>
+        <td>{{ club['joined_at'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+</body>
+</html>

@@ -83,25 +83,71 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        role = request.form.get('role')  # ✅ Added role field
 
-        if not username or not password:
-            flash("Enter both username and password", "danger")
+        if not username or not password or not role:
+            flash("Please fill all fields, including role.", "danger")
             return redirect(url_for('login'))
 
+        # ✅ Admin fixed credentials
+        if username == "admin01" and password == "123" and role == "admin":
+            session['user'] = username
+            session['role'] = "admin"
+            flash("Welcome Admin!", "success")
+            return redirect(url_for('admin_dashboard'))
+
+        # ✅ Normal user login
         conn = get_db_connection()
         user = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
         conn.close()
 
         if user and check_password_hash(user['password'], password):
             session['user'] = username
+            session['role'] = role
             flash('Login successful!', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('index'))
+
+            if role == "admin":
+                return redirect(url_for('admin_dashboard'))
+            else:
+                next_page = request.args.get('next')
+                return redirect(next_page or url_for('index'))
         else:
             flash('Invalid username or password', 'danger')
             return redirect(url_for('login'))
+
     return render_template('login.html')
 
+
+# ------------------ Admin Dashboard ------------------
+@app.route('/admin_dashboard')
+@login_required
+def admin_dashboard():
+    # Ensure only admin can access this
+    if session.get('role') != 'admin':
+        flash("Access denied! Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+
+    # Fetch all data
+    users = conn.execute("SELECT username, email FROM users").fetchall()
+    book_events = conn.execute("SELECT * FROM event_bookings").fetchall()
+    club_joins = conn.execute("SELECT * FROM club_members").fetchall()
+
+    conn.close()
+
+    # Pass data to admin_dashboard.html
+    return render_template(
+        'admin_dashboard.html',
+        user=session.get('user'),
+        users=users,
+        book_events=book_events,
+        club_joins=club_joins
+    )
+
+
+
+# ------------------ Register ------------------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -128,11 +174,14 @@ def register():
 
     return render_template('login.html')
 
+
+# ------------------ Logout ------------------
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
+    session.clear()
     flash('You have been logged out.', 'success')
     return redirect(url_for('index'))
+
 
 # ------------------ CLUB ROUTES ------------------
 @app.route('/join_club', methods=['GET', 'POST'])
@@ -159,6 +208,7 @@ def join_club():
     groups = conn.execute("SELECT * FROM club_members WHERE username=?", (username,)).fetchall()
     conn.close()
     return render_template('join_club.html', user=username, groups=groups)
+
 
 @app.route('/edit_club/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -190,6 +240,7 @@ def edit_club(id):
 
     return render_template('edit_club.html', user=username, group=group)
 
+
 @app.route('/delete_club/<int:id>', methods=['POST'])
 @login_required
 def delete_club(id):
@@ -200,6 +251,7 @@ def delete_club(id):
     conn.close()
     flash("🗑️ Group deleted successfully!", "success")
     return redirect(url_for('join_club'))
+
 
 # ------------------ EVENT ROUTES ------------------
 @app.route('/book_event', methods=['GET', 'POST'])
@@ -216,26 +268,58 @@ def book_event():
         participants = int(request.form.get('participants', 1))
 
         # Check for conflict
-        conflict = conn.execute("""SELECT * FROM event_bookings
-                                   WHERE event_date=? AND event_time=? AND username=?""",
-                                (event_date, event_time, username)).fetchone()
+        conflict = conn.execute(
+            "SELECT * FROM event_bookings WHERE event_date=? AND event_time=? AND username=?",
+            (event_date, event_time, username)
+        ).fetchone()
+
         if conflict:
+            conn.close()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': '⚠️ You already have an event at this date and time!'})
             flash("⚠️ You already have an event at this date and time!", "danger")
-        else:
-            conn.execute("""INSERT INTO event_bookings
-                            (username, event_name, event_date, event_time, duration, participants)
-                            VALUES (?, ?, ?, ?, ?, ?)""",
-                         (username, event_name, event_date, event_time, duration, participants))
-            conn.commit()
-            flash("✅ Event booked successfully!", "success")
+            return redirect(url_for('book_event'))
+
+        conn.execute(
+            "INSERT INTO event_bookings (username, event_name, event_date, event_time, duration, participants) VALUES (?, ?, ?, ?, ?, ?)",
+            (username, event_name, event_date, event_time, duration, participants)
+        )
+        conn.commit()
+
+        # Get newly added event
+        event = conn.execute(
+            "SELECT * FROM event_bookings WHERE username=? ORDER BY id DESC LIMIT 1",
+            (username,)
+        ).fetchone()
         conn.close()
+
+        # If the request came from JS (AJAX)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'message': '✅ Event booked successfully!',
+                'event': {
+                    'id': event['id'],
+                    'event_name': event['event_name'],
+                    'event_date': event['event_date'],
+                    'event_time': event['event_time'],
+                    'duration': event['duration'],
+                    'participants': event['participants']
+                }
+            })
+
+        flash("✅ Event booked successfully!", "success")
         return redirect(url_for('book_event'))
 
-    # GET request
-    events = conn.execute("SELECT * FROM event_bookings WHERE username=? ORDER BY event_date, event_time",
-                          (username,)).fetchall()
+    # GET request (show booked events)
+    events = conn.execute(
+        "SELECT * FROM event_bookings WHERE username=? ORDER BY event_date, event_time",
+        (username,)
+    ).fetchall()
     conn.close()
+
     return render_template('book_event.html', user=username, events=events)
+
+
 
 @app.route('/edit_event/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -268,6 +352,7 @@ def edit_event(id):
 
     return render_template('edit_event.html', user=username, event=event)
 
+
 @app.route('/delete_event/<int:id>', methods=['POST'])
 @login_required
 def delete_event(id):
@@ -278,6 +363,7 @@ def delete_event(id):
     conn.close()
     flash("🗑️ Event deleted successfully!", "success")
     return redirect(url_for('book_event'))
+
 
 # ------------------ Run App ------------------
 if __name__ == '__main__':

@@ -251,6 +251,7 @@
       const formData = new FormData(e.target);
       const response = await fetch("{{ url_for('book_event') }}", {
         method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
         body: formData
       });
       const data = await response.json();

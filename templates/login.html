@@ -109,6 +109,24 @@
     .social-media a { width:40px; height:40px; border:1px solid #ccc; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#333; font-size:18px; text-decoration:none; transition:0.3s; }
     .social-media a:hover { background:rgb(94,191,97); color:black; }
 
+  .input-field select {
+  width: 100%; 
+  padding: 12px 12px 12px 40px; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  appearance: none;
+}
+
+.input-field select:focus {
+  border-color: rgb(94,191,97);
+  box-shadow: 0 0 5px rgba(94,191,97,0.4);
+}
+
+
     .panels-container { width:50%; background: rgb(94,191,97); color:black; text-align:center; display:flex; align-items:center; justify-content:center; padding:40px; position:relative; transition:0.6s ease-in-out; }
     .panel-content h3 { font-size:24px; margin-bottom:10px; }
     .panel-content p { font-size:14px; margin-bottom:20px; }
@@ -172,6 +190,16 @@
             <i class="fas fa-lock"></i>
             <input type="password" name="password" placeholder="Password" required>
           </div>
+
+            <div class="input-field">
+             <i class="fas fa-user-tag"></i>
+             <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="User">User</option>
+                <option value="admin">Admin</option>
+             </select>
+            </div>
+
           <a href="#" class="forgot">Forgot Password?</a>
           <button type="submit">Login</button>
           <p class="social-text">Or login with social platforms</p>
