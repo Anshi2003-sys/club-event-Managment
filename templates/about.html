@@ -52,25 +52,26 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
+  right: 10px;
+  top: 10px;
   border-radius: 6px;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
   z-index: 10;
+  width:200px;
+
 }
 
 /* Dropdown link */
 .dropdown-content a {
   display: block;
   padding: 10px;
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
 .dropdown-content a:hover{
   color:black;
 }
+
 
 /* Show dropdown only when active */
 .user-section.active .dropdown-content {
@@ -131,7 +132,7 @@
   <div class="user-section" id="userMenu">
     <span class="user-toggle">👤 {{ user }} &#9662;</span>
     <div class="dropdown-content">
-      <a href="{{ url_for('logout') }}">Logout</a>
+      <a href="{{ url_for('logout') }}">🚪Logout</a>
     </div>
   </div>
   {% else %}

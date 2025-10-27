@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify 
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -33,9 +33,12 @@ def init_db():
         members INTEGER NOT NULL,
         group_name TEXT NOT NULL,
         reason TEXT,
-        joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        joined_at TIMESTAMP DEFAULT (datetime('now', 'localtime'))
     )''')
 
+    # Make event_bookings include venue/contact/email/price/capacity.
+    # If table already exists with fewer columns, this won't alter it;
+    # but on new DB it will be created with these columns.
     c.execute('''
     CREATE TABLE IF NOT EXISTS event_bookings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,6 +48,11 @@ def init_db():
         event_time TEXT NOT NULL DEFAULT '',
         duration INTEGER NOT NULL DEFAULT 1,
         participants INTEGER NOT NULL DEFAULT 1,
+        contact_info TEXT DEFAULT '',
+        email TEXT DEFAULT '',
+        venue TEXT DEFAULT '',
+        price INTEGER DEFAULT 0,
+        capacity INTEGER DEFAULT 0,
         booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(username, event_name)
     )''')
@@ -83,39 +91,41 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        role = request.form.get('role')  # ✅ Added role field
+        role = request.form.get('role')  # role field in login form
 
         if not username or not password or not role:
             flash("Please fill all fields, including role.", "danger")
             return redirect(url_for('login'))
 
-        # ✅ Admin fixed credentials
-        if username == "admin01" and password == "123" and role == "admin":
+        # ✅ Only admin01 can access admin dashboard
+        if username == "admin01" and password == "1243" and role == "admin":
             session['user'] = username
             session['role'] = "admin"
             flash("Welcome Admin!", "success")
             return redirect(url_for('admin_dashboard'))
 
-        # ✅ Normal user login
+        # ✅ For normal users, check credentials from DB
         conn = get_db_connection()
         user = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
         conn.close()
 
         if user and check_password_hash(user['password'], password):
-            session['user'] = username
-            session['role'] = role
-            flash('Login successful!', 'success')
-
+            # Prevent normal users from pretending to be admin
             if role == "admin":
-                return redirect(url_for('admin_dashboard'))
-            else:
-                next_page = request.args.get('next')
-                return redirect(next_page or url_for('index'))
+                flash("Access denied!", "danger")
+                return redirect(url_for('login'))
+
+            session['user'] = username
+            session['role'] = "user"
+            flash("Login successful!", "login")
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('index'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash("Invalid username or password.", "danger")
             return redirect(url_for('login'))
 
     return render_template('login.html')
+
 
 
 # ------------------ Admin Dashboard ------------------
@@ -147,7 +157,7 @@ def admin_dashboard():
 
 
 
-# ------------------ Register ------------------
+# ----------------------------- Register -----------------------------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -193,15 +203,17 @@ def join_club():
         club = request.form.get('club')
         members = request.form.get('members')
         group_name = request.form.get('group_name')
+        contact = request.form['contact']
+        email = request.form['email']
         reason = request.form.get('reason')
 
         conn = get_db_connection()
-        conn.execute("""INSERT INTO club_members (username, club, members, group_name, reason)
-                        VALUES (?, ?, ?, ?, ?)""",
-                     (username, club, members, group_name, reason))
+        conn.execute("""INSERT INTO club_members (username, club, members, group_name,contact,email ,reason)
+                        VALUES (?, ?, ?, ?,?,?, ?)""",
+                     (username, club, members, group_name, contact,email,reason))
         conn.commit()
         conn.close()
-        flash("✅ You joined the club successfully!", "success")
+        flash("✅ Your club joining request has been submitted. Required information will be shared to you soon.", "join_club")
         return redirect(url_for('join_club'))
 
     conn = get_db_connection()
@@ -226,16 +238,18 @@ def edit_club(id):
         club = request.form['club']
         members = request.form['members']
         group_name = request.form['group_name']
+        contact = request.form['contact']
+        email = request.form['email']
         reason = request.form['reason']
 
         conn = get_db_connection()
         conn.execute("""UPDATE club_members
-                        SET club=?, members=?, group_name=?, reason=?
+                        SET club=?, members=?, group_name=?, contact=?,email=?,reason=?
                         WHERE id=?""",
-                     (club, members, group_name, reason, id))
+                     (club, members, group_name,contact,email, reason, id))
         conn.commit()
         conn.close()
-        flash("✏️ Group updated successfully!", "success")
+        flash("✏️ Group updated successfully!", "join_club")
         return redirect(url_for('join_club'))
 
     return render_template('edit_club.html', user=username, group=group)
@@ -249,40 +263,89 @@ def delete_club(id):
     conn.execute("DELETE FROM club_members WHERE id=? AND username=?", (id, username))
     conn.commit()
     conn.close()
-    flash("🗑️ Group deleted successfully!", "success")
+    flash("🗑️ Group deleted successfully!", "join_club")
     return redirect(url_for('join_club'))
 
 
-# ------------------ EVENT ROUTES ------------------
+# -------------------------------- BOOK EVENT ROUTES -----------------------------
 @app.route('/book_event', methods=['GET', 'POST'])
 @login_required
 def book_event():
     username = session.get('user')
     conn = get_db_connection()
 
+    # venue -> price for 3 hours and capacity mapping
+    venue_info = {
+        "Main Hall": {"price_3hrs": 4000, "capacity": 100},
+        "Auditorium": {"price_3hrs": 8000, "capacity": 200},
+        "Civil Conference Hall": {"price_3hrs": 3500, "capacity": 60},
+        "Education Dept Conference Hall 1": {"price_3hrs": 3000, "capacity": 50},
+        "Education Dept Conference Hall 2": {"price_3hrs": 3000, "capacity": 50},
+        "IQAC Conference Hall": {"price_3hrs": 5000, "capacity": 70}
+    }
+
     if request.method == 'POST':
         event_name = request.form.get('event_name')
         event_date = request.form.get('event_date') or ''
         event_time = request.form.get('event_time') or ''
-        duration = int(request.form.get('duration', 1))
-        participants = int(request.form.get('participants', 1))
+        try:
+            duration = float(request.form.get('duration', 1))
+        except:
+            duration = 1
+        try:
+            participants = int(request.form.get('participants', 1))
+        except:
+            participants = 1
+        contact_info = request.form.get('contact_info') or ''
+        email = request.form.get('email') or ''
+        venue = request.form.get('venue') or ''
 
-        # Check for conflict
+        # basic validation
+        if not all([event_name, event_date, event_time, venue, contact_info, email]):
+            conn.close()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': 'Please fill all required fields.'})
+            flash("Please fill all required fields.", "danger")
+            return redirect(url_for('book_event'))
+
+        # compute price proportional to duration (price_3hrs is base)
+        base = venue_info.get(venue, {"price_3hrs": 0, "capacity": 0})
+        price_3hrs = base["price_3hrs"]
+        capacity = base["capacity"]
+
+        # price scaled by duration: price = price_3hrs * (duration / 3)
+        # round to integer
+        if duration <= 0:
+            duration = 1
+        price = int(round(price_3hrs * (duration / 3.0)))
+
+        # Prevent over-capacity
+        if participants > capacity:
+            conn.close()
+            msg = f"⚠️ The selected venue ({venue}) supports up to {capacity} people. You requested {participants}."
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': msg})
+            flash(msg, 'danger')
+            return redirect(url_for('book_event'))
+
+        # Prevent double booking for same venue/date/time
         conflict = conn.execute(
-            "SELECT * FROM event_bookings WHERE event_date=? AND event_time=? AND username=?",
-            (event_date, event_time, username)
+            "SELECT * FROM event_bookings WHERE event_date=? AND event_time=? AND venue=?",
+            (event_date, event_time, venue)
         ).fetchone()
 
         if conflict:
             conn.close()
+            msg = f"⚠️ {venue} is already booked for {event_date} at {event_time}."
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return jsonify({'error': '⚠️ You already have an event at this date and time!'})
-            flash("⚠️ You already have an event at this date and time!", "danger")
+                return jsonify({'error': msg})
+            flash(msg, 'danger')
             return redirect(url_for('book_event'))
 
+        # Insert event with price and capacity
         conn.execute(
-            "INSERT INTO event_bookings (username, event_name, event_date, event_time, duration, participants) VALUES (?, ?, ?, ?, ?, ?)",
-            (username, event_name, event_date, event_time, duration, participants)
+            "INSERT INTO event_bookings (username, event_name, event_date, event_time, duration, participants, contact_info, email, venue, price, capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (username, event_name, event_date, event_time, int(duration), participants, contact_info, email, venue, price, capacity)
         )
         conn.commit()
 
@@ -296,18 +359,23 @@ def book_event():
         # If the request came from JS (AJAX)
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
-                'message': '✅ Event booked successfully!',
+                # 'message': '✅ Event booked successfully!',
                 'event': {
                     'id': event['id'],
                     'event_name': event['event_name'],
                     'event_date': event['event_date'],
                     'event_time': event['event_time'],
                     'duration': event['duration'],
-                    'participants': event['participants']
+                    'participants': event['participants'],
+                    'contact_info': event['contact_info'],
+                    'email': event['email'],
+                    'venue': event['venue'],
+                    'price': event['price'],
+                    'capacity': event['capacity']
                 }
             })
 
-        flash("✅ Event booked successfully!", "success")
+        flash("✅ Event booked successfully! Our team will get back to you soon", "book_event")
         return redirect(url_for('book_event'))
 
     # GET request (show booked events)
@@ -339,15 +407,52 @@ def edit_event(id):
         event_time = request.form['event_time']
         duration = request.form['duration']
         participants = request.form['participants']
+        contact_info = request.form.get('contact_info', '')
+        email = request.form.get('email', '')
+        venue = request.form.get('venue', '')
 
+        # If venue changed or participants changed, re-check capacity & conflicts
         conn = get_db_connection()
+        # capacity lookup (same mapping as above)
+        venue_info = {
+            "Main Hall": {"price_3hrs": 4000, "capacity": 100},
+            "Auditorium": {"price_3hrs": 8000, "capacity": 200},
+            "Civil Conference Hall": {"price_3hrs": 3500, "capacity": 60},
+            "Education Dept Conference Hall 1": {"price_3hrs": 3000, "capacity": 50},
+            "Education Dept Conference Hall 2": {"price_3hrs": 3000, "capacity": 50},
+            "IQAC Conference Hall": {"price_3hrs": 5000, "capacity": 70}
+        }
+        base = venue_info.get(venue, {"price_3hrs": 0, "capacity": 0})
+        cap = base["capacity"]
+        if int(participants) > cap:
+            conn.close()
+            flash(f"⚠️ The selected venue ({venue}) supports up to {cap} people. You requested {participants}.", "danger")
+            return redirect(url_for('book_event'))
+
+        # Check conflict: same date/time/venue for different booking id
+        conflict = conn.execute(
+            "SELECT * FROM event_bookings WHERE event_date=? AND event_time=? AND venue=? AND id!=?",
+            (event_date, event_time, venue, id)
+        ).fetchone()
+        if conflict:
+            conn.close()
+            flash(f"⚠️ {venue} is already booked for {event_date} at {event_time}.", "danger")
+            return redirect(url_for('book_event'))
+
+        # compute price again based on duration
+        try:
+            dur = float(duration)
+        except:
+            dur = 1.0
+        price = int(round(base["price_3hrs"] * (dur / 3.0)))
+
         conn.execute("""UPDATE event_bookings
-                        SET event_name=?, event_date=?, event_time=?, duration=?, participants=?
-                        WHERE id=?""",
-                     (event_name, event_date, event_time, duration, participants, id))
+                        SET event_name=?, event_date=?, event_time=?, duration=?, participants=?, contact_info=?, email=?, venue=?, price=?, capacity=?
+                        WHERE id=? AND username=?""",
+                     (event_name, event_date, event_time, int(duration), int(participants), contact_info, email, venue, price, cap, id, username))
         conn.commit()
         conn.close()
-        flash("✏️ Event updated successfully!", "success")
+        flash("✏️ Event updated successfully!", "book_event")
         return redirect(url_for('book_event'))
 
     return render_template('edit_event.html', user=username, event=event)
@@ -361,7 +466,7 @@ def delete_event(id):
     conn.execute("DELETE FROM event_bookings WHERE id=? AND username=?", (id, username))
     conn.commit()
     conn.close()
-    flash("🗑️ Event deleted successfully!", "success")
+    flash("🗑️ Event deleted successfully!", "book_event")
     return redirect(url_for('book_event'))
 
 

@@ -47,50 +47,54 @@
 }
 
 /* Dropdown hidden by default */
+/* Dropdown hidden by default */
 .dropdown-content {
   display: none;
   position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
+  right: 10px;
+  top: 10px;
   border-radius: 6px;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
   z-index: 10;
+  width:200px;
+
 }
 
 /* Dropdown link */
 .dropdown-content a {
   display: block;
   padding: 10px;
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
 .dropdown-content a:hover{
   color:black;
 }
-
 /* Show dropdown only when active */
 .user-section.active .dropdown-content {
   display: block;
 }
 
+#club {
+  width: 750px; /* adjust as you like, e.g. 45px–60px */
+  font-size: 16px;
+}
 
-    .container { text-align:center; margin:30px auto; max-width:800px; }
+    .container {text-align:center; margin:30px auto; max-width:800px; }
     .container h1 { font-size:36px; margin-bottom:10px; color:#222; }
     .container p { font-size:18px; color:#555; margin-bottom:30px; }
     .form-container { background:rgb(94, 191, 97); padding:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:left; }
     .form-container h2 { margin-bottom:20px; color:#222; text-align:center; }
     label { display:block; margin-bottom:8px; font-weight:bold; color:#fff; }
-    select, input, textarea { width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
-    .form-container button { width:100%; padding:12px; border:none; background:#28a745; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
+    select, input, textarea { width:730px; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
+    .form-container button { width:750px; padding:12px; border:none; background:#28a745; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
     .form-container button:hover { background:#1e7e34; }
-    table { width:100%; border-collapse:collapse; margin-top:20px; }
-    table, th, td { border:1px solid #ccc; }
+    table { width:10px; border-collapse:collapse; margin-top:20px; }
+    table, th, td { border:1px solid #4f1313; width: 100px;}
     th, td { padding:10px; text-align:center; }
     th { background:#5ebf61; color:white; }
-    .btn-edit { background:orange; color:white; padding:5px 10px; border-radius:4px; text-decoration:none; }
-    .btn-delete { background:red; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; }
+    .btn-edit { background:orange; color:white;padding:5px 20px; border-radius:4px; text-decoration:none; }
+    .btn-delete { background:red; color:white; border:none; padding:5px 20px; border-radius:4px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -108,8 +112,8 @@
   {% if user %}
   <div class="user-section" id="userMenu">
     <span class="user-toggle">👤 {{ user }} &#9662;</span>
-    <div class="dropdown-content">
-      <a href="{{ url_for('logout') }}">Logout</a>
+     <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">🚪Logout</a>
     </div>
   </div>
   {% else %}
@@ -124,11 +128,18 @@
     <div class="form-container">
       <h2>Fill the form to join the Club</h2>
 
-      {% if success_message %}
-        <p style="color:white; background:green; padding:10px; border-radius:5px; text-align:center;">
-          {{ success_message }}
-        </p>
+    <!------------------------message----------------------->
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'join_club' %}
+        <div style="text-align:center; color:black;margin-top: -10px;font-weight:bold;">{{ message }}</div>
       {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 
       <form method="POST" action="{{ url_for('join_club') }}">
         <label for="club">Select Club:</label>
@@ -147,6 +158,13 @@
         <label for="group_name">Name of Your Group:</label>
         <input type="text" name="group_name" id="group_name" required>
 
+        <label for="contact">Contact Number:</label>
+        <input type="tel" name="contact" id="contact" pattern="[0-9]{10}" placeholder="Enter 10-digit number" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" required>
+
+
         <label for="reason">Why do you want to join?</label>
         <textarea name="reason" id="reason" rows="3" required></textarea>
 
@@ -155,13 +173,15 @@
     </div>
 
     {% if groups %}
-    <div style="margin-top:30px; text-align:left;">
+    <div style="margin-top:30px;text-align:left;">
       <h2>Your Groups</h2>
       <table>
         <tr>
           <th>Club</th>
           <th>Members</th>
           <th>Group Name</th>
+          <th>Contact</th>
+          <th>Email</th>
           <th>Reason</th>
           <th>Joined At</th>
           <th>Actions</th>
@@ -171,6 +191,8 @@
           <td>{{ group.club }}</td>
           <td>{{ group.members }}</td>
           <td>{{ group.group_name }}</td>
+          <td>{{ group.contact }}</td>
+          <td>{{ group.email }}</td>
           <td>{{ group.reason }}</td>
           <td>{{ group.joined_at }}</td>
           <td>

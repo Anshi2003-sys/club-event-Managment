@@ -73,13 +73,18 @@
   display: block;
 }
 
+#club {
+  width:670px; /* adjust as you like, e.g. 45px–60px */
+  font-size: 16px;
+}
+
     .container { text-align:center; margin:30px auto; max-width:700px; }
     .container h1 { font-size:32px; margin-bottom:10px; color:#222; }
     .form-container { background:rgb(94, 191, 97); padding:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:left; }
     .form-container h2 { margin-bottom:20px; color:#222; text-align:center; }
     label { display:block; margin-bottom:8px; font-weight:bold; color:#fff; }
-    select, input, textarea { width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
-    .form-container button { width:100%; padding:12px; border:none; background:#007bff; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
+    select, input, textarea { width:650px; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; }
+    .form-container button { width:670px; padding:12px; border:none; background:#1b9235; color:white; border-radius:6px; font-size:16px; cursor:pointer; }
     .form-container button:hover { background:#0056b3; }
     .btn-back { display:inline-block; margin-top:15px; padding:10px 20px; background:#6c757d; color:white; border-radius:5px; text-decoration:none; }
     .btn-back:hover { background:#5a6268; }
@@ -132,6 +137,12 @@
 
         <label for="group_name">Name of Your Group:</label>
         <input type="text" name="group_name" id="group_name" value="{{ group['group_name'] }}" required>
+
+        <label for="contact">Contact no.</label>
+        <input type="text" name="contact" id="contact" value="{{ group['contact'] }}" required>
+
+        <label for="email">Enter your Email</label>
+        <input type="text" name="email" id="email" value="{{ group['email'] }}" required>
 
         <label for="reason">Why do you want to join?</label>
         <textarea name="reason" id="reason" rows="3" required>{{ group['reason'] }}</textarea>

@@ -5,106 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Event - Campus Connect</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #e6f0ff, #ffffff);
-    }
+     body {margin: 0;font-family: Arial, sans-serif;background: linear-gradient(to right, #e6f0ff, #ffffff);}
 
-    .navbar {
-      display: flex;
-      align-items: center;
-      background-color: rgb(94, 191, 97);
-      padding: 15px 30px;
-      font-family: Arial, sans-serif;
-    }
+    .navbar {display: flex;align-items: center;background-color: rgb(94, 191, 97);padding: 15px 30px;}
+    .navbar h2 { margin: 0 30px 0 10px; color: black; font-weight: bold; }
+    .navbar a {text-decoration: none; color: black; margin: 0 20px; font-weight: 500; margin-left: 60px;}
+    .navbar a:hover { color: white; }
 
-    .navbar h2 {
-      margin: 0 30px 0 10px;
-      color: black;
-      font-weight: bold;
-    }
+    .user-section { position: relative; margin-left: auto; cursor: pointer; font-weight: bold; color: black; }
+    .dropdown-content {display: none; position: absolute; right: 10px; width:200px;top:10px; border-radius: 6px;z-index: 10}
+    .dropdown-content a { display: block; padding: 10px; color: white; text-decoration: none; }
+    .dropdown-content a:hover{color:black}
+    .user-section.active .dropdown-content { display: block; }
 
-    .navbar a {
-      text-decoration: none;
-      color: black;
-      margin: 0 20px;
-      font-weight: 500;
-      margin-left: 60px;
-    }
-
-    .navbar a:hover {
-      color: white;
-    }
-
-    .user-section {
-      position: relative;
-      margin-left: auto;
-      cursor: pointer;
-      font-weight: bold;
-      color: black;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background-color: white;
-      border-radius: 6px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-      z-index: 10;
-    }
-
-    .dropdown-content a {
-      display: block;
-      padding: 10px;
-      color: black;
-      text-decoration: none;
-    }
-
-    .dropdown-content a:hover {
-      color: black;
-    }
-
-    .user-section.active .dropdown-content {
-      display: block;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
+    .container{max-width: 950px;margin: 30px auto;padding: 20px; background: #fff; border-radius: 10px;box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
     h1, h2 { text-align: center; color: #222; }
 
     form label { display: block; margin-top: 10px; font-weight: bold; }
-    form input, form select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      background-color: white;
-    }
-
-    form button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 12px;
-      border: none;
-      background: #28a745;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-
+    form input, form select {width: 900px; padding: 10px; margin-top: 5px; border-radius: 6px;border: 1px solid #ccc; background-color: white;}
+    form button {margin-top: 15px; width: 950px; padding: 12px; border: none;background: #28a745; color: white; font-size: 16px; cursor: pointer; border-radius: 6px;}
     form button:hover { background: #1e7e34; }
+
+    .price-box {margin-top: 10px;background: #e9ffe9;padding: 10px;border-radius: 6px;color: #1a531b;font-weight: bold;text-align: center;display: none;}
 
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     table, th, td { border: 1px solid #ccc; }
@@ -113,27 +35,26 @@
     .success { color: green; text-align: center; margin: 15px 0; font-weight: bold; }
     .danger { color: red; text-align: center; margin: 15px 0; font-weight: bold; }
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center; align-items: center;
-    }
+    /* Modal background */
+    .modal {display: none;position: fixed;top: 0; left: 0;width: 100%; height: 100%;background-color: rgba(0, 0, 0, 0.6);justify-content: center;align-items: center;z-index: 1000;}
 
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
-    }
+    /* Modal box */
+    .modal-content {background: white;padding: 25px 30px;border-radius: 12px; width: 90%;max-width: 500px;box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);position: relative;animation: fadeIn 0.3s ease-in-out;}
 
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      color: red;
-      font-weight: bold;
-    }
+    .close-btn {position: absolute;top: 10px;right: 15px;font-size: 20px;color: red;cursor: pointer;}
+
+    #editForm label {display: block;margin-top: 10px;font-weight: bold;color: #333;}
+
+    #editForm input {width: 100%;padding: 10px;margin-top: 5px;border-radius: 6px;border: 1px solid #ccc;box-sizing: border-box;font-size: 14px;}
+
+    #editForm button {
+    width: 100%;margin-top: 20px;padding: 12px; border: none;border-radius: 8px;background-color: #28a745; color: white;font-size: 16px;cursor: pointer;transition: background-color 0.2s ease;}
+
+    #editForm button:hover { background-color: #218838; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }}
   </style>
 </head>
 <body>
@@ -141,7 +62,6 @@
   <div class="navbar">
     <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
     <h2>Campus Connect</h2>
-
     <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('about') }}">About</a>
     <a href="{{ url_for('contact') }}">Contact</a>
@@ -149,25 +69,37 @@
     <a href="{{ url_for('book_event') }}">Book Event</a>
 
     {% if user %}
-    <div class="user-section" id="userMenu">
-      <span class="user-toggle">👤 {{ user }} &#9662;</span>
-      <div class="dropdown-content">
-        <a href="{{ url_for('logout') }}">Logout</a>
-      </div>
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+     <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">🚪Logout</a>
     </div>
-    {% else %}
-      <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
-    {% endif %}
   </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
 
   <div class="container">
     <h1>Book an Event</h1>
-    <div id="message"></div>
+     <!-- Flash or JS success messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'book_event' %}
+        <div style="text-align:center; font-weight:bold; margin:10px; color:green;">
+          {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div id="message"></div>
 
     <!-- Event Booking Form -->
     <form id="eventForm" method="POST">
-      <label for="event_name">Event Name:</label>
-      <select name="event_name" id="event_name" required>
+      <label>Event Name:</label>
+      <select name="event_name" required>
         <option value="" disabled selected>Select Event</option>
         <option value="Farewell">Farewell</option>
         <option value="Freshers">Freshers</option>
@@ -176,18 +108,36 @@
         <option value="Seminar">Seminar</option>
       </select>
 
-      <label for="event_date">Date:</label>
-      <input type="date" name="event_date" id="event_date" required>
+      <label>Date:</label>
+      <input type="date" name="event_date" required>
 
-      <label for="event_time">Time:</label>
-      <input type="time" name="event_time" id="event_time" required>
+      <label>Time:</label>
+      <input type="time" name="event_time" required>
 
-      <label for="duration">Duration (hours):</label>
-      <input type="number" name="duration" id="duration" min="1" required>
+      <label>Duration (hours):</label>
+      <input type="number" name="duration" min="1" required>
 
-      <label for="participants">Number of Participants:</label>
+      <label>Venue:</label>
+      <select name="venue" id="venue" required>
+        <option value="" disabled selected>Select Venue</option>
+        <option value="Main Hall">Main Hall</option>
+        <option value="Auditorium">Auditorium</option>
+        <option value="Civil Conference Hall">Civil Conference Hall</option>
+        <option value="Education Dept Conference Hall 1">Education Dept Conference Hall 1</option>
+        <option value="Education Dept Conference Hall 2">Education Dept Conference Hall 2</option>
+        <option value="IQAC Conference Hall">IQAC Conference Hall</option>
+      </select>
+
+      <label>Participants:</label>
       <input type="number" name="participants" id="participants" min="1" required>
 
+      <label>Contact Info:</label>
+      <input type="tel" name="contact_info" placeholder="Enter contact number" pattern="[0-9]{10}" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <div class="price-box" id="priceBox"></div>
       <button type="submit">Book Event</button>
     </form>
 
@@ -200,7 +150,10 @@
           <th>Date</th>
           <th>Time</th>
           <th>Duration</th>
+          <th>Venue</th>
           <th>Participants</th>
+          <th>Contact</th>
+          <th>Email</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -210,8 +163,12 @@
           <td>{{ event['event_name'] }}</td>
           <td>{{ event['event_date'] }}</td>
           <td>{{ event['event_time'] }}</td>
-          <td>{{ event['duration'] }} hrs</td>
+          <td>{{ event['duration'] }}</td>
+          <td>{{ event['venue'] }}</td>
           <td>{{ event['participants'] }}</td>
+          <td>{{ event['contact_info'] }}</td>
+          <td>{{ event['email'] }}</td>
+          
           <td>
             <button class="edit-btn">Edit</button>
             <button class="delete-btn" style="background-color:red; color:white;">Delete</button>
@@ -230,90 +187,129 @@
       <form id="editForm">
         <input type="hidden" id="edit_id">
         <label>Event Name:</label>
-        <input type="text" id="edit_event_name" required>
+        <select id="edit_event_name" required required style="width:100%; padding:5px; border-radius:6px; border:1px solid #ccc; margin-bottom:5px;">
+             <option value="">Select Event</option>
+             <option value="Farewell">Farewell</option>
+             <option value="Freshers">Freshers</option>
+             <option value="Bootcamp">Bootcamp</option>
+             <option value="Workshop">Workshop</option>
+             <option value="Seminar">Seminar</option>
+        </select>
+
         <label>Date:</label>
         <input type="date" id="edit_event_date" required>
         <label>Time:</label>
         <input type="time" id="edit_event_time" required>
         <label>Duration (hrs):</label>
         <input type="number" id="edit_duration" required>
+        
+        <label>Venue:</label>
+        <select id="edit_venue" required required style="width:100%; padding:5px; border-radius:6px; border:1px solid #ccc; margin-bottom:5px;">
+            <option value="">Select Venue</option>
+            <option value="Main Hall">Main Hall</option>
+            <option value="Auditorium">Auditorium</option>
+            <option value="Civil Conference Hall">Civil Conference Hall</option>
+            <option value="Education Dept Conference Hall 1">Education Dept Conference Hall 1</option>
+            <option value="Education Dept Conference Hall 2">Education Dept Conference Hall 2</option>
+            <option value="IQAC Conference Hall">IQAC Conference Hall</option>
+        </select>
+
         <label>Participants:</label>
         <input type="number" id="edit_participants" required>
+        <label>Contact:</label>
+        <input type="text" id="edit_contact_info" required>
+        <label>Email:</label>
+        <input type="email" id="edit_email" required>
+        
         <button type="submit">Update Event</button>
       </form>
     </div>
   </div>
 
-  <script>
-    // --- Book Event ---
-    document.getElementById("eventForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const response = await fetch("{{ url_for('book_event') }}", {
-        method: "POST",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        body: formData
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle"); // ✅ fixed class name
+
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
       });
-      const data = await response.json();
 
-      const msgDiv = document.getElementById("message");
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
 
-      if (data.error) {
-        msgDiv.innerHTML = `<div class="danger">${data.error}</div>`;
-        return;
+  <script>
+    // Venue pricing and capacity map
+    const venueInfo = {
+      "Main Hall": { price: 3000, duration: 3, capacity: 50 },
+      "Auditorium": { price: 8000, duration: 3, capacity: 150 },
+      "Civil Conference Hall": { price: 4000, duration: 3, capacity: 80 },
+      "Education Dept Conference Hall 1": { price: 3500, duration: 3, capacity: 70 },
+      "Education Dept Conference Hall 2": { price: 3500, duration: 3, capacity: 70 },
+      "IQAC Conference Hall": { price: 5000, duration: 3, capacity: 70 }
+    };
+
+    const venueSelect = document.getElementById("venue");
+    const priceBox = document.getElementById("priceBox");
+    const participantsInput = document.getElementById("participants");
+
+    venueSelect.addEventListener("change", () => {
+      const selected = venueSelect.value;
+      if (venueInfo[selected]) {
+        const { price, duration, capacity } = venueInfo[selected];
+        priceBox.style.display = "block";
+        priceBox.textContent = `💰 Price: ₹${price} for ${duration} hours | Max Participants: ${capacity}`;
+        participantsInput.max = capacity;
+      } else {
+        priceBox.style.display = "none";
+        participantsInput.removeAttribute("max");
       }
-
-      msgDiv.innerHTML = `<div class="success">${data.message}</div>`;
-
-      const newRow = document.createElement("tr");
-      newRow.setAttribute("data-id", data.event.id);
-      newRow.innerHTML = `
-        <td>${data.event.event_name}</td>
-        <td>${data.event.event_date}</td>
-        <td>${data.event.event_time}</td>
-        <td>${data.event.duration} hrs</td>
-        <td>${data.event.participants}</td>
-        <td>
-          <button class="edit-btn">Edit</button>
-          <button class="delete-btn" style="background-color:red; color:white;">Delete</button>
-        </td>`;
-      document.getElementById("eventsBody").appendChild(newRow);
-      e.target.reset();
     });
 
-    // --- Edit Modal Functions ---
+    // --- Edit & Delete Modal Logic (unchanged) ---
     const modal = document.getElementById("editModal");
     const closeModal = document.getElementById("closeModal");
 
     document.addEventListener("click", (e) => {
       if (e.target.classList.contains("edit-btn")) {
         const row = e.target.closest("tr");
-        const id = row.dataset.id;
         const cells = row.querySelectorAll("td");
 
-        document.getElementById("edit_id").value = id;
-        document.getElementById("edit_event_name").value = cells[0].textContent;
+        document.getElementById("edit_id").value = row.dataset.id;
+        document.getElementById("edit_event_name").value = cells[0].textContent.trim();
         document.getElementById("edit_event_date").value = cells[1].textContent;
         document.getElementById("edit_event_time").value = cells[2].textContent;
-        document.getElementById("edit_duration").value = parseInt(cells[3].textContent);
-        document.getElementById("edit_participants").value = cells[4].textContent;
+        document.getElementById("edit_duration").value = cells[3].textContent;
+       document.getElementById("edit_venue").value = cells[4].textContent.trim();
+        document.getElementById("edit_participants").value = cells[5].textContent;
+        document.getElementById("edit_contact_info").value = cells[6].textContent;
+        document.getElementById("edit_email").value = cells[7].textContent;
+        
 
         modal.style.display = "flex";
+        modal.style.alignItems = "center";
+        modal.style.justifyContent = "center";
       }
 
       if (e.target.classList.contains("delete-btn")) {
         const row = e.target.closest("tr");
         const id = row.dataset.id;
         if (confirm("Are you sure you want to delete this event?")) {
-          fetch(`/delete_event/${id}`, { method: "POST" })
-            .then(() => row.remove());
+          fetch(`/delete_event/${id}`, { method: "POST" }).then(() => row.remove());
         }
       }
     });
 
     closeModal.addEventListener("click", () => modal.style.display = "none");
 
-    // --- Update Event ---
     document.getElementById("editForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const id = document.getElementById("edit_id").value;
@@ -322,26 +318,13 @@
       formData.append("event_date", document.getElementById("edit_event_date").value);
       formData.append("event_time", document.getElementById("edit_event_time").value);
       formData.append("duration", document.getElementById("edit_duration").value);
+       formData.append("venue", document.getElementById("edit_venue").value);
       formData.append("participants", document.getElementById("edit_participants").value);
+      formData.append("contact_info", document.getElementById("edit_contact_info").value);
+      formData.append("email", document.getElementById("edit_email").value);
 
       await fetch(`/edit_event/${id}`, { method: "POST", body: formData });
       location.reload();
-    });
-
-    // --- Dropdown user menu ---
-    document.addEventListener("DOMContentLoaded", function() {
-      const userMenu = document.getElementById("userMenu");
-
-      if (userMenu) {
-        const toggle = userMenu.querySelector(".user-toggle");
-        toggle.addEventListener("click", function(event) {
-          event.stopPropagation();
-          userMenu.classList.toggle("active");
-        });
-        window.addEventListener("click", function() {
-          userMenu.classList.remove("active");
-        });
-      }
     });
   </script>
 </body>

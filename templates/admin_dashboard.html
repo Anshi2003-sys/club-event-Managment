@@ -63,7 +63,10 @@
         <th>Date</th>
         <th>Time</th>
         <th>Duration (hrs)</th>
+        <th>Venue</th>
         <th>Participants</th>
+        <th>Contact</th>
+        <th>Email</th>
       </tr>
       {% for event in book_events %}
       <tr>
@@ -72,7 +75,10 @@
         <td>{{ event['event_date'] }}</td>
         <td>{{ event['event_time'] }}</td>
         <td>{{ event['duration'] }}</td>
+        <td>{{ event['venue'] }}</td>
         <td>{{ event['participants'] }}</td>
+        <td>{{ event['contact_info'] }}</td>
+          <td>{{ event['email'] }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -86,6 +92,8 @@
         <th>Club</th>
         <th>Members</th>
         <th>Group Name</th>
+        <th>Contact</th>
+        <th>Email</th>
         <th>Reason</th>
         <th>Joined At</th>
       </tr>
@@ -95,6 +103,8 @@
         <td>{{ club['club'] }}</td>
         <td>{{ club['members'] }}</td>
         <td>{{ club['group_name'] }}</td>
+        <td>{{ club['contact'] }}</td>
+        <td>{{ club['email'] }}</td>
         <td>{{ club['reason'] }}</td>
         <td>{{ club['joined_at'] }}</td>
       </tr>
