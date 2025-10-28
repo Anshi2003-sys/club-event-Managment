@@ -2,6 +2,23 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
+from datetime import datetime
+import pytz
+
+@app.template_filter('to_ist')
+def to_ist(value):
+    """Convert UTC/localtime string from DB to IST (Asia/Kolkata)"""
+    try:
+        # Parse database datetime string
+        dt = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+        # Convert to IST timezone
+        ist = pytz.timezone('Asia/Kolkata')
+        dt_ist = dt.astimezone(ist)
+        # Format as 24-hour date/time
+        return dt_ist.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception:
+        return value  # return as-is if any parsing error
+
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
@@ -84,6 +101,12 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template('contact.html', user=session.get('user'))
+
+@app.route('/past')
+def past():
+    return render_template('past.html', user=session.get('user'))
+
+
 
 # ------------------ Auth ------------------
 @app.route('/login', methods=['GET', 'POST'])

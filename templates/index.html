@@ -593,29 +593,29 @@
     <div class="card1"> <div class="card-1"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Workshop</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('book_event') }}'">Book Event</button></div></div>
 
 
     <div class="card2"> <div class="card-2"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Freshers</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('book_event') }}'">Book Event</button></div></div>
 
     <div class="card3"> <div class="card-3"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Farewell</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('book_event') }}'">Book Event</button></div></div>
 
 
     <div class="card4"> <div class="card-4"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Seminar</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('book_event') }}'">Book Event</button></div></div>
 
     <div class="card5"> <div class="card-5"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Bootcamp</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('book_event') }}'">Book Event</button></div></div>
 
     <!----------- past event ---------------------->
     <div class="past-event">
@@ -626,23 +626,23 @@
      <div class="card6"> <div class="card-6"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Workshops</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('past') }}'">Explore Event</button></div></div>
 
     <div class="card7"> <div class="card-7"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Freshers</h1>
-    <button>Explore event</button></div></div>
+     <button onclick="window.location.href='{{ url_for('past') }}'">Explore Event</button></div></div>
 
     <div class="card8"> <div class="card-8"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Farewell</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('past') }}'">Explore Event</button></div></div>
 
 
     <div class="card9"> <div class="card-9"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Seminar</h1>
-    <button>Explore event</button></div></div>
+    <button onclick="window.location.href='{{ url_for('past') }}'">Explore Event</button></div></div>
 
 <!-- club  names  -->
     <div class="club">
@@ -652,27 +652,27 @@
      <div class="card10"> <div class="card-10"><img src="{{ url_for('static', filename='images/Literature-club.jpg') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Literature Club</h1>
-    <button>Explore Clubs</button></div></div>
+    <button onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button></div></div>
 
     <div class="card11"> <div class="card-11"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Cultural Club</h1>
-    <button>Explore Clubs</button></div></div>
+    <button onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button></div></div>
      
     <div class="card12"> <div class="card-12"><img src="{{ url_for('static', filename='images/red-ribbon-club.png') }}"
      style="width:230px; height:140px;position: absolute;margin-left: 15px;margin-top: 90px; border-radius:10px;">
      <h1>Red Ribbon Club</h1>
-    <button>Explore Clubs</button></div></div>
+    <button onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button></div></div>
 
      <div class="card13"> <div class="card-13"><img src="{{ url_for('static', filename='images/chess-club.jpg') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Chess Club</h1>
-    <button>Explore Clubs</button></div>
+    <button onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button></div>
   
      <div class="card14"> <div class="card-14"><img src="{{ url_for('static', filename='images/workshop.png') }}"
      style="width:230px; height:150px;position: absolute;margin-left: 15px;margin-top: 70px; border-radius:10px;">
      <h1>Adventure Club</h1>
-    <button>Explore Clubs</button></div></div></div>
+    <button onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button></div></div></div>
 
 
 
