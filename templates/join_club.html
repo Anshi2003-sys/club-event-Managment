@@ -5,38 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Join Club - Campus Connect</title>
   <style>
-     body {
+      body {
           margin: 0;
           font-family: Arial, sans-serif;
           background: linear-gradient(to right, #e6f0ff, #ffffff);
         }
 
     /* Navbar */
-       .navbar {
-  display: flex;
-  align-items: center;
-  background-color: rgb(94, 191, 97);
-  padding: 15px 30px;
-  font-family: Arial, sans-serif;
-}
+      .navbar {
+          display: flex;
+          align-items: center;
+          background-color: rgb(94, 191, 97);
+          padding: 15px 30px;
+          font-family: Arial, sans-serif;
+        }
 
-.navbar h2 {
-  margin: 0 30px 0 10px;
-  color: black;
-  font-weight: bold;
-}
+      .navbar h2 {
+          margin: 0 30px 0 10px;
+          color: black;
+          font-weight: bold;
+        }
 
-.navbar a{
-  text-decoration: none;
-  color: black;
-  margin: 0 20px;
-  font-weight: 500;
-  margin-left: 60px;
-}
+      .navbar a{
+          text-decoration: none;
+          color: black;
+          margin: 0 20px;
+          font-weight: 500;
+          margin-left: 60px;
+        } 
 
-.navbar a:hover {
-  color: white;
-}
+      .navbar a:hover {
+          color: white;
+        }
 
 .user-section {
   position: relative;
@@ -57,6 +57,12 @@
   z-index: 10;
   width:200px;
 
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 /* Dropdown link */
@@ -80,7 +86,7 @@
   font-size: 16px;
 }
 
-    .container {text-align:center; margin:30px auto; max-width:800px; }
+     .container {text-align:center; margin:30px auto; max-width:800px; }
     .container h1 { font-size:36px; margin-bottom:10px; color:#222; }
     .container p { font-size:18px; color:#555; margin-bottom:30px; }
     .form-container { background:rgb(94, 191, 97); padding:20px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); text-align:left; }
@@ -129,7 +135,6 @@
       <h2>Fill the form to join the Club</h2>
 
     <!------------------------message----------------------->
-
       {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
@@ -139,7 +144,6 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
-
 
       <form method="POST" action="{{ url_for('join_club') }}">
         <label for="club">Select Club:</label>
@@ -172,6 +176,8 @@
       </form>
     </div>
 
+
+
     {% if groups %}
     <div style="margin-top:30px;text-align:left;">
       <h2>Your Groups</h2>
@@ -194,7 +200,8 @@
           <td>{{ group.contact }}</td>
           <td>{{ group.email }}</td>
           <td>{{ group.reason }}</td>
-          <td>{{ group.joined_at }}</td>
+          <td>{{ group.joined_at[:10] if group.joined_at else '' }}</td>
+
           <td>
             <a href="{{ url_for('edit_club', id=group.id) }}" class="btn-edit">Edit</a>
             <form method="POST" action="{{ url_for('delete_club', id=group.id) }}" style="display:inline;">
@@ -207,8 +214,6 @@
     </div>
     {% endif %}
   </div>
-
-
 
    <script>
   document.addEventListener("DOMContentLoaded", function() {

@@ -1,84 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>explaore past</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Past Events - Campus Connect</title>
 <style>
-          body {
-          margin: 0;
-          font-family: Arial, sans-serif;
-          background: linear-gradient(to right, #e6f0ff, #ffffff);
-        }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #e6f0ff, #ffffff);
+  }
 
-        /* Navbar */
-      .navbar {
-  display: flex;
-  align-items: center;
-  background-color: rgb(94, 191, 97);
-  padding: 15px 30px;
-  font-family: Arial, sans-serif;
-}
+  /* Navbar */
+  .navbar {
+    display: flex;
+    align-items: center;
+    background-color: rgb(94, 191, 97);
+    padding: 15px 30px;
+  }
+  .navbar h2 { margin: 0 30px 0 10px; color: black; font-weight: bold; }
+  .navbar a {
+    text-decoration: none;
+    color: black;
+    margin: 0 20px;
+    font-weight: 500;
+    margin-left: 60px;
+  }
+  .navbar a:hover { color: white; }
 
-.navbar h2 {
-  margin: 0 30px 0 10px;
-  color: black;
-  font-weight: bold;
-}
+  .user-section {
+    position: relative;
+    margin-left: auto;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+  }
 
-.navbar a{
-  text-decoration: none;
-  color: black;
-  margin: 0 20px;
-  font-weight: 500;
-  margin-left: 60px;
-}
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border-radius: 6px;
+    z-index: 10;
+    width:200px;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+  }
+  .dropdown-content a:hover { color: black; }
+  .user-section.active .dropdown-content { display: block; }
 
-.navbar a:hover {
-  color: white;
-}
+  /* Page Heading */
+  .header {
+    text-align: center;
+    margin: 40px 0;
+  }
+  .header h1 {
+    font-size: 38px;
+    color: #222;
+    margin-bottom: 10px;
+  }
+  .header p {
+    font-size: 18px;
+    color: #555;
+  }
 
-.user-section {
-  position: relative;
-  margin-left: auto;
-  cursor: pointer;
-  font-weight: bold;
-  color: black;
-}
+  /* Event Cards */
+  .events-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 0 30px 60px;
+  }
 
-/* Dropdown hidden by default */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  border-radius: 6px;
-  z-index: 10;
-  width:200px;
+  .event-card {
+    width: 320px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
 
-}
+  .event-card:hover {
+    transform: scale(1.05);
+  }
 
-/* Dropdown link */
-.dropdown-content a {
-  display: block;
-  padding: 10px;
-  color: white;
-  text-decoration: none;
-}
+  .event-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
 
-.dropdown-content a:hover{
-  color:black;
-}
+  .event-info {
+    padding: 15px;
+  }
 
-/* Show dropdown only when active */
-.user-section.active .dropdown-content {
-  display: block;
-}
+  .event-info h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #2b7a2b;
+  }
+
+  .event-info p {
+    margin-top: 8px;
+    color: #444;
+    font-size: 15px;
+    text-align: justify;
+  }
 
 </style>
+</head>
 <body>
-    <!-- Navbar -->
+
+<!-- Navbar -->
 <div class="navbar">
   <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
   <h2>Campus Connect</h2>
@@ -88,17 +128,84 @@
   <a href="{{ url_for('contact') }}">Contact</a>
   <a href="{{ url_for('join_club') }}">Join Club</a>
   <a href="{{ url_for('book_event') }}">Book Event</a>
+  
 
   {% if user %}
   <div class="user-section" id="userMenu">
     <span class="user-toggle">👤 {{ user }} &#9662;</span>
-    <div class="dropdown-content">
-      <a href="{{ url_for('logout') }}">🚪Logout</a>
+     <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">🚪 Logout</a>
     </div>
   </div>
   {% else %}
     <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
   {% endif %}
 </div>
+
+<!-- Page Header -->
+<div class="header">
+  <h1>Past Events & Memories</h1>
+  <p>Relive our most amazing campus moments — workshops, bootcamps, fests, and more!</p>
+</div>
+
+<!-- Event Cards Section -->
+<div class="events-container">
+  <div class="event-card">
+    <img src="{{ url_for('static', filename='images/workshop1.avif') }}" alt="Workshop">
+    <div class="event-info">
+      <h3>Technical Workshop</h3>
+      <p>Our interactive workshop helped students explore Python, AI tools, and web development fundamentals with hands-on guidance.</p>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <img src="{{ url_for('static', filename='images/Bootcamp.webp') }}" alt="Bootcamp">
+    <div class="event-info">
+      <h3>Code Bootcamp</h3>
+      <p>A 3-day coding challenge where students teamed up to build innovative projects and learned new frameworks together.</p>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <img src="{{ url_for('static', filename='images/freshers1.jpg') }}" alt="Freshers Party">
+    <div class="event-info">
+      <h3>Freshers Party</h3>
+      <p>Welcoming the new batch with music, dance, games, and laughter. A night full of energy and new friendships!</p>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <img src="{{ url_for('static', filename='images/farewell1.jpg') }}" alt="Farewell">
+    <div class="event-info">
+      <h3>Farewell Night</h3>
+      <p>Celebrating the seniors’ journey with performances, awards, and heartfelt memories to cherish forever.</p>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <img src="{{ url_for('static', filename='images/christmas.jpg') }}" alt="Christmas Celebration">
+    <div class="event-info">
+      <h3>Christmas Celebration</h3>
+      <p>The campus was full of joy with Christmas trees, carols, games, and gift exchanges — spreading festive cheer everywhere!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle for user menu
+  document.addEventListener("DOMContentLoaded", function() {
+    const userMenu = document.getElementById("userMenu");
+    if (userMenu) {
+      const toggle = userMenu.querySelector(".user-toggle");
+      toggle.addEventListener("click", function(event) {
+        event.stopPropagation();
+        userMenu.classList.toggle("active");
+      });
+      window.addEventListener("click", function() {
+        userMenu.classList.remove("active");
+      });
+    }
+  });
+</script>
 </body>
 </html>

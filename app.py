@@ -3,22 +3,6 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
-import pytz
-
-@app.template_filter('to_ist')
-def to_ist(value):
-    """Convert UTC/localtime string from DB to IST (Asia/Kolkata)"""
-    try:
-        # Parse database datetime string
-        dt = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-        # Convert to IST timezone
-        ist = pytz.timezone('Asia/Kolkata')
-        dt_ist = dt.astimezone(ist)
-        # Format as 24-hour date/time
-        return dt_ist.strftime("%Y-%m-%d %H:%M:%S")
-    except Exception:
-        return value  # return as-is if any parsing error
-
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
@@ -53,9 +37,7 @@ def init_db():
         joined_at TIMESTAMP DEFAULT (datetime('now', 'localtime'))
     )''')
 
-    # Make event_bookings include venue/contact/email/price/capacity.
-    # If table already exists with fewer columns, this won't alter it;
-    # but on new DB it will be created with these columns.
+    
     c.execute('''
     CREATE TABLE IF NOT EXISTS event_bookings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -236,13 +218,15 @@ def join_club():
                      (username, club, members, group_name, contact,email,reason))
         conn.commit()
         conn.close()
-        flash("✅ Your club joining request has been submitted. Required information will be shared to you soon.", "join_club")
+        flash("✅Submitted successfully. Required information will be shared to you soon.", "join_club")
         return redirect(url_for('join_club'))
 
     conn = get_db_connection()
     groups = conn.execute("SELECT * FROM club_members WHERE username=?", (username,)).fetchall()
     conn.close()
     return render_template('join_club.html', user=username, groups=groups)
+
+
 
 
 @app.route('/edit_club/<int:id>', methods=['GET', 'POST'])

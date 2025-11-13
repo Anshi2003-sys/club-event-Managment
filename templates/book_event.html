@@ -52,12 +52,19 @@
 
     #editForm button:hover { background-color: #218838; }
 
+/* Animation */
+    @keyframes fadeIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }}
   </style>
 </head>
-<body>
+
   <!-- Navbar -->
   <div class="navbar">
     <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
@@ -106,6 +113,8 @@
         <option value="Bootcamp">Bootcamp</option>
         <option value="Workshop">Workshop</option>
         <option value="Seminar">Seminar</option>
+        <option value="Seminar">Christmas Fair</option>
+        <option value="Seminar">New Year</option>
       </select>
 
       <label>Date:</label>
@@ -179,6 +188,10 @@
     </table>
   </div>
 
+
+ 
+
+
   <!-- Edit Modal -->
   <div id="editModal" class="modal">
     <div class="modal-content">
@@ -194,6 +207,8 @@
              <option value="Bootcamp">Bootcamp</option>
              <option value="Workshop">Workshop</option>
              <option value="Seminar">Seminar</option>
+             <option value="Seminar">Christmas Fair</option>
+             <option value="Seminar">New Year</option>
         </select>
 
         <label>Date:</label>
@@ -245,6 +260,32 @@
     }
   });
 </script>
+
+<!----Avoid,booking on past date and time as well----->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("eventForm");
+  const dateInput = document.querySelector('input[name="event_date"]');
+  const timeInput = document.querySelector('input[name="event_time"]');
+
+  form.addEventListener("submit", function (e) {
+    const selectedDate = new Date(dateInput.value);
+    const selectedTime = timeInput.value;
+    const indiaTime = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+
+    // Combine selected date & time into one Date object (for proper comparison)
+    const [hours, minutes] = selectedTime.split(":").map(Number);
+    selectedDate.setHours(hours, minutes, 0, 0);
+
+    if (selectedDate < indiaTime) {
+      e.preventDefault();
+      alert("⚠️ You cannot book an event for a past date or time!");
+    }
+  });
+});
+</script>
+
+
 
   <script>
     // Venue pricing and capacity map
