@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Christmas Fairs - Campus Connect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+       body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+            color: #222;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+
+        .navbar img {
+            height: 45px;
+            margin-right: 10px;
+        }
+
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        .user-section {
+            margin-left: auto;
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: rgb(94,191,97);
+            border-radius: 6px;
+            width: 180px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            color: black;
+        }
+
+        .user-section.active .dropdown-content {
+            display: block;
+        }
+        /* Page Heading */
+        .heading {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 42px;
+            color: black;
+            font-weight: bold;
+        }
+        .sub-heading {
+            text-align: center;
+            font-size: 22px;
+            color: black;
+            margin-bottom: 30px;
+        }
+
+        /* Event Cards */
+        .events-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+        }
+        .event-card {
+            background: white;
+            width: 320px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+            padding: 18px;
+            text-align: center;
+        }
+        .event-card img {
+            width: 100%;
+            height: 190px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        .event-title {
+            font-size: 22px;
+            color: black;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+        .event-details {
+            font-size: 16px;
+            color: #444;
+            margin-top: 6px;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+   <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}">
+        <h2>Campus Connect</h2>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+
+        {% if user %}
+        <div class="user-section" id="userMenu">
+            <span class="user-toggle">👤 {{ user }} ▼</span>
+            <div class="dropdown-content">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login / Register</a>
+        {% endif %}
+    </div>
+    <!-- Headings -->
+    <div class="heading">🎄 Christmas Fair 2025 🎄</div>
+    <div class="sub-heading">Join the festive celebration across multiple locations!</div>
+
+    <!-- Events -->
+    <div class="events-container">
+
+        <!-- Event 1 -->
+        <div class="event-card">
+            <img src="{{ url_for('static', filename='images/ch1.jpg') }}" alt="Christmas Fair">
+            <div class="event-title">Christmas Fair – City Park</div>
+            <div class="event-details">
+                📅 Date: 10th December 2025 <br>
+                🕒 Time: 4:00 PM – 9:00 PM <br>
+                📍 Venue: Auditorium
+            </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="event-card">
+            <img src="{{ url_for('static', filename='images/ch2.webp') }}" alt="Christmas Market">
+            <div class="event-title">Winter Wonderland – Hall Ground</div>
+            <div class="event-details">
+                📅 Date: 15th December 2025 <br>
+                🕒 Time: 5:00 PM – 10:00 PM <br>
+                📍 Venue: Near Main Hall
+            </div>
+        </div>
+
+        <!-- Event 3 -->
+        <div class="event-card">
+            <img src="{{ url_for('static', filename='images/ch3.jpg') }}" alt="Holiday Event">
+            <div class="event-title">Holiday Festival – Riverside</div>
+            <div class="event-details">
+                📅 Date: 22nd December 2025 <br>
+                🕒 Time: 3:00 PM – 8:30 PM <br>
+                📍 Venue: Near Auditorium
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

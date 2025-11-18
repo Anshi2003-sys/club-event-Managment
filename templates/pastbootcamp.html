@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Past Bootcamps - Campus Connect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+        .navbar a:hover { color: white; }
+        .page-header {
+            text-align: center;
+            font-size: 34px;
+            margin: 38px 0 18px 0;
+            color: #208d3f;
+        }
+        .card-list {
+            max-width: 950px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .bootcard {
+            background: #fff;
+            display: flex;
+            box-shadow: 0 8px 24px rgba(94,191,97,0.15);
+            border-radius: 18px;
+            overflow: hidden;
+            min-height: 220px;
+        }
+        .bootcard-img {
+            width: 260px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 18px 0 0 18px;
+        }
+        .bootcard-details {
+            flex: 1;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .bootcard-title {
+            font-size: 22px;
+            color: #208d3f;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .bootcard-date {
+            font-size: 16px;
+            color: #d94322;
+            margin-bottom: 8px;
+        }
+        .bootcard-desc {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        .photos-link {
+            margin-top: 8px;
+            font-size: 16px;
+            color: #2196f3;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+        <h2>Campus Connect</h2>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+    </div>
+
+    <div class="page-header">Memories from Past Bootcamps</div>
+
+    <div class="card-list">
+        <!-- Card 1 -->
+        <div class="bootcard">
+            <img src="{{ url_for('static', filename='images/aimldatascience.png') }}" class="bootcard-img" alt="Python Bootcamp">
+            <div class="bootcard-details">
+                <div class="bootcard-title">Python & Data Science Bootcamp</div>
+                <div class="bootcard-date">Held: August 21-23, 2024 | Seminar Hall B</div>
+                <div class="bootcard-desc">
+                    Students built their first real-world data pipelines and collaborated in teams. All participants received certificates!
+                </div>
+                <a href="#" class="photos-link">View Photos</a>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="bootcard">
+            <img src="{{ url_for('static', filename='images/aimlb.jpg') }}" class="bootcard-img" alt="AI Bootcamp">
+            <div class="bootcard-details">
+                <div class="bootcard-title">AI & Machine Learning Bootcamp</div>
+                <div class="bootcard-date">Held: February 13-14, 2025 | Innovation Lab</div>
+                <div class="bootcard-desc">
+                    Workshops on AI models, neural nets, and deploying solutions. Special sessions by industry experts.
+                </div>
+                <a href="#" class="photos-link">View Photos</a>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="bootcard">
+            <img src="{{ url_for('static', filename='images/Seminar.jpg') }}" class="bootcard-img" alt="Interview Bootcamp">
+            <div class="bootcard-details">
+                <div class="bootcard-title">Resume & Interview Bootcamp</div>
+                <div class="bootcard-date">Held: March 9, 2025 | Placement Cell</div>
+                <div class="bootcard-desc">
+                    50+ students participated in mock interview rounds and 1:1 resume reviews from alumni and faculty.
+                </div>
+                <a href="#" class="photos-link">View Photos</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

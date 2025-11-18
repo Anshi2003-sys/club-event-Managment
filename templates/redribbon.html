@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Ribbon Club</title>
+    <link rel="stylesheet" href="redribbon.css">
+</head>
+<style>
+     body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+
+        /* Navbar */
+      .navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(94, 191, 97);
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar h2 {
+  margin: 0 30px 0 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar a{
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  font-weight: 500;
+  margin-left: 60px;
+}
+
+.navbar a:hover {
+  color: white;
+}
+
+.user-section {
+  position: relative;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dropdown hidden by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border-radius: 6px;
+  z-index: 10;
+  width:200px;
+
+}
+
+/* Dropdown link */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover{
+  color:black;
+}
+
+/* Show dropdown only when active */
+.user-section.active .dropdown-content {
+  display: block;
+}
+
+
+/* HEADER */
+.header {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+}
+
+.header-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.header-text {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    color: white;
+}
+
+.header-text h1 {
+    font-size: 40px;
+    margin: 0;
+}
+
+/* ABOUT */
+.about {
+    padding: 40px;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.about-img {
+    width: 260px;
+    border-radius: 15px;
+}
+
+/* VISION & MISSION */
+.vm {
+    display: flex;
+    gap: 20px;
+    padding: 40px;
+}
+
+.box {
+    width: 50%;
+    background: #ffeaea;
+    padding: 20px;
+    border-left: 6px solid red;
+    border-radius: 10px;
+}
+
+/* OBJECTIVES */
+.objectives {
+    padding: 40px;
+}
+
+.objectives ul li {
+    margin-bottom: 10px;
+}
+
+/* ACTIVITIES */
+.activities {
+    padding: 40px;
+}
+
+.activity-img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.activities .container{
+    width:500px;
+    height: 500px;
+    margin-left: 600px;
+    background-image: url("{{ url_for('static', filename='images/rr1.jpeg') }}");
+    background-size: cover;
+    margin-top: -500px;
+    border-radius: 30px;
+}
+.cta-box {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .cta-btn {
+            background-color: rgb(94,191,97);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 16px 34px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgb(94 191 97 / 20%);
+        }
+        .cta-btn:hover { background-color: #208d3f; }
+
+</style>
+<body>
+    <div class="navbar">
+  <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+  <h2>Campus Connect</h2>
+
+  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  <a href="{{ url_for('join_club') }}">Join Club</a>
+  <a href="{{ url_for('book_event') }}">Book Event</a>
+
+  {% if user %}
+  <div class="user-section" id="userMenu">
+    <span class="user-toggle">👤 {{ user }} &#9662;</span>
+    <div class="dropdown-content">
+      <a href="{{ url_for('logout') }}">🚪Logout</a>
+    </div>
+  </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Login/Register</a>
+  {% endif %}
+</div>
+    <!-- HEADER SECTION -->
+    <section class="header">
+        <img src="{{ url_for('static', filename='images/red-ribbon-club.png') }}" class="header-img">
+        <div class="header-text">
+            <h1>Red Ribbon Club (RRC)</h1>
+            <p>Established: 2011</p>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about">
+        <h2>About the Red Ribbon Club</h2>
+
+        <div class="about-content">
+            <img src="{{ url_for('static', filename='images/rr2.jpg') }}" class="about-img">
+
+            <p>
+                The Red Ribbon Club (RRC) is a preventive initiative to promote voluntary 
+                blood donation and create awareness about HIV/AIDS, mental health, life skills, 
+                and substance abuse among youth. It trains peer educators within the campus 
+                to spread awareness and inspire healthy living.
+            </p>
+        </div>
+
+        <p>
+            Established under the State AIDS Control Society (MSACS), the RRC at Mizoram University 
+            was formed on 24th June 2011 and officially launched by the Vice Chancellor on 
+            6th September 2011.
+        </p>
+    </section>
+
+    <!-- VISION & MISSION -->
+    <section class="vm">
+        <div class="box">
+            <h2>Vision</h2>
+            <p>
+                To instill awareness on HIV/AIDS, life skills, mental health, and substance abuse, 
+                while promoting voluntary blood donation among youth.
+            </p>
+        </div>
+
+        <div class="box">
+            <h2>Mission</h2>
+            <p>
+                • Spread awareness on HIV/AIDS<br>
+                • Motivate youth to become Peer Educators<br>
+                • Encourage voluntary blood donation<br>
+                • Build responsible and healthy young citizens
+            </p>
+        </div>
+    </section>
+
+    <!-- OBJECTIVES -->
+    <section class="objectives">
+        <h2>Objectives</h2>
+        <ul>
+            <li>Address issues related to HIV/AIDS among students.</li>
+            <li>Spread correct and verified information.</li>
+            <li>Train Peer Educators and Change Agents.</li>
+            <li>Promote voluntary blood donation.</li>
+            <li>Encourage healthy lifestyles.</li>
+        </ul>
+    </section>
+
+    <!-- ACTIVITIES -->
+    <section class="activities">
+        <h2>Major Activities</h2>
+
+        <!-- <img src="{{ url_for('static', filename='images/rr3.jpeg') }}" class="activity-img"> -->
+
+        <ul>
+            <li>Peer Educators Training Programs (2011–2023)</li>
+            <li>Voluntary Blood Donation Camps (2012–2024)</li>
+            <li>World AIDS Day Observations</li>
+            <li>Mental Health Awareness Workshops</li>
+            <li>Red Ribbon Quiz Competitions (State Level)</li>
+            <li>Health Fest 2023 — Seminar & Workshop</li>
+            <li>Poster Making Competitions</li>
+            <li>Crimson Fest 2023 – Drama & Basketball (Runner up)</li>
+        </ul>
+
+        <div class="container"></div></section>
+
+     <div class="cta-box">
+        <button class="cta-btn" onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Event</title>
+
+    <style>
+           body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+            color: #222;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+
+        .navbar img {
+            height: 45px;
+            margin-right: 10px;
+        }
+
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        .user-section {
+            margin-left: auto;
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: rgb(94,191,97);
+            border-radius: 6px;
+            width: 180px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            color: black;
+        }
+
+        .user-section.active .dropdown-content {
+            display: block;
+        }
+
+
+        /* PAGE DESIGN */
+        .chess-container {
+            width: 80%;
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 350px;
+            background-image: url('{{ url_for("static", filename="images/c4.jpeg") }}');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .content {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .gallery-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .cta-box {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .cta-btn {
+            background-color: rgb(94,191,97);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 16px 34px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgb(94 191 97 / 20%);
+        }
+        .cta-btn:hover { background-color: #208d3f; }
+    </style>
+
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}">
+        <h2>Campus Connect</h2>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+
+        {% if user %}
+        <div class="user-section" id="userMenu">
+            <span class="user-toggle">👤 {{ user }} ▼</span>
+            <div class="dropdown-content">
+                <a href="{{ url_for('logout') }}">🚪 Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login/Register</a>
+        {% endif %}
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="chess-container">
+
+        <div class="title">♟ Chess Championship</div>
+
+        <div class="banner"></div>
+
+        <div class="content">
+            <p>
+                The annual Chess Championship brings together strategic thinkers from all departments.
+                The event enhances logical reasoning, planning skills, competitiveness, and sportsmanship.
+            </p>
+
+            <p>
+                Students from all levels — beginners to advanced players — participate and enjoy 
+                the thrill of mind battle, one move at a time.
+            </p>
+        </div>
+
+        <div class="gallery-title">Event Highlights</div>
+
+        <div class="gallery">
+            <img src="{{ url_for('static', filename='images/c1.jpg') }}">
+            <img src="{{ url_for('static', filename='images/c2.jpg') }}">
+            <img src="{{ url_for('static', filename='images/c2.jpeg') }}">
+            <img src="{{ url_for('static', filename='images/c3.webp') }}">
+        </div>
+
+    </div>
+
+     <div class="cta-box">
+        <button class="cta-btn" onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button>
+    </div>
+
+    <script>
+        // Navbar dropdown logic
+        const userMenu = document.getElementById("userMenu");
+        if (userMenu) {
+            userMenu.addEventListener("click", function() {
+                this.classList.toggle("active");
+            });
+        }
+    </script>
+
+</body>
+</html>
+

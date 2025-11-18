@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Past Workshops - Campus Connect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+        .navbar a:hover { color: white; }
+        .page-header {
+            text-align: center;
+            font-size: 34px;
+            margin: 38px 0 18px 0;
+            color: #208d3f;
+        }
+        .card-list {
+            max-width: 950px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .workshop-card {
+            background: #fff;
+            display: flex;
+            box-shadow: 0 8px 24px rgba(94,191,97,0.15);
+            border-radius: 18px;
+            overflow: hidden;
+            min-height: 220px;
+        }
+        .workshop-img {
+            width: 260px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 18px 0 0 18px;
+        }
+        .workshop-details {
+            flex: 1;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .workshop-title {
+            font-size: 22px;
+            color: #208d3f;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .workshop-date {
+            font-size: 16px;
+            color: #d94322;
+            margin-bottom: 8px;
+        }
+        .workshop-desc {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .photos-link {
+            margin-top: 8px;
+            font-size: 16px;
+            color: #2196f3;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" style="height:45px; margin-right:10px;">
+        <h2>Campus Connect</h2>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+    </div>
+
+    <div class="page-header">Past Workshops</div> 
+
+    <div class="card-list">
+        <!-- Card 1 -->
+        <div class="workshop-card">
+            <img src="{{ url_for('static', filename='images/10daysw.jpeg') }}" class="workshop-img" alt="Disaster Management Workshop">
+            <div class="workshop-details">
+                <div class="workshop-title">Ten-Day National Workshop</div>
+                <div class="workshop-date">Held: Sep 8-18, 2025 |Civil Conference Hall</div>
+                <div class="workshop-desc">
+National Workshop on Remote Sensing and GIS: A 10-day national workshop that concluded on September 18, 2025                </div>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="workshop-card">
+            <img src="{{ url_for('static', filename='images/enterskill.jpeg') }}" class="workshop-img" alt="Entrepreneurship Workshop">
+            <div class="workshop-details">
+                <div class="workshop-title">Entrepreneurship & Startup Skills</div>
+                <div class="workshop-date">Held: Oct 5, 2025 | Auditorium</div>
+                <div class="workshop-desc">
+                    Interactive startup ideas pitch event, business model canvas sessions, and alumni panel. Certificates for all!
+                </div>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="workshop-card">
+            <img src="{{ url_for('static', filename='images/workshop3.jpg') }}" class="workshop-img" alt="Academic Writing Workshop">
+            <div class="workshop-details">
+                <div class="workshop-title">Academic Writing & Research Workshop</div>
+                <div class="workshop-date">Held: Nov 2, 2025 | Library Seminar Room</div>
+                <div class="workshop-desc">
+                    Research reference styles, collaborative peer feedback, and tips for getting your work published.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

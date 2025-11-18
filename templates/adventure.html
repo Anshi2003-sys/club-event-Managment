@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Club – MZU</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+            color: #222;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+
+        .navbar img {
+            height: 45px;
+            margin-right: 10px;
+        }
+
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        .user-section {
+            margin-left: auto;
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: rgb(94,191,97);
+            border-radius: 6px;
+            width: 180px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            color: black;
+        }
+
+        .user-section.active .dropdown-content {
+            display: block;
+        }
+
+        /* HEADER BANNER */
+        .header {
+            width: 100%;
+            height: 350px;
+            background-image: url('{{ url_for("static", filename="images/ad3.jpeg") }}');
+            background-size: cover;
+            background-position: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            position: relative;
+        }
+
+        .header-text {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            color: white;
+        }
+        .header-text h1 {
+            font-size: 45px;
+            margin: 0;
+        }
+
+        /* PAGE CONTENT */
+        .section {
+            width: 85%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* PURPOSE BOX */
+        .purpose-box {
+            background: #e2f7e2;
+            padding: 25px;
+            border-left: 6px solid green;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* GALLERY */
+        .gallery {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .cta-box {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .cta-btn {
+            background-color: rgb(94,191,97);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 16px 34px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgb(94 191 97 / 20%);
+        }
+        .cta-btn:hover { background-color: #208d3f; }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}">
+        <h2>Campus Connect</h2>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+
+        {% if user %}
+        <div class="user-section" id="userMenu">
+            <span class="user-toggle">👤 {{ user }} ▼</span>
+            <div class="dropdown-content">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login / Register</a>
+        {% endif %}
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-text">
+            <h1>Adventure Club • MZU</h1>
+        </div>
+    </div>
+
+    <!-- PURPOSE SECTION -->
+    <div class="section">
+        <h2>🎯 Purpose of MZU YAC</h2>
+
+        <div class="purpose-box">
+            The purpose of the Youth Adventure Club is to promote outdoor activities, build confidence 
+            and teamwork, encourage environmental awareness, and develop leadership, discipline, and fitness 
+            among youth through adventure and exploration.
+        </div>
+    </div>
+
+    <!-- ABOUT US -->
+    <div class="section">
+        <h2>🌄 About Us</h2>
+        <p>
+            The Youth Adventure Club (YAC) of Mizoram University is a student-led organization 
+            that promotes adventure, teamwork, and outdoor learning. We organize trekking, 
+            camping, cycling, and other adventure activities that help students build confidence, 
+            leadership, and a spirit of exploration.
+        </p>
+
+        <p>
+            Our mission is to encourage a healthy and active lifestyle while connecting students 
+            with nature and fostering unity through adventure.
+        </p>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="section">
+        <h2>📸 Adventure Moments</h2>
+
+        <div class="gallery">
+            <img src="{{ url_for('static', filename='images/ad1.jpg') }}">
+            <img src="{{ url_for('static', filename='images/ad2.jpg') }}">
+            <img src="{{ url_for('static', filename='images/ad3.jpg') }}">
+            <img src="{{ url_for('static', filename='images/ad4.jpg') }}">
+            <img src="{{ url_for('static', filename='images/ad5.jpg') }}">
+        </div>
+    </div>
+
+     <div class="cta-box">
+        <button class="cta-btn" onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button>
+    </div>
+    <script>
+        // Navbar Dropdown
+        const userMenu = document.getElementById("userMenu");
+        if (userMenu) {
+            userMenu.addEventListener("click", function() {
+                this.classList.toggle("active");
+            });
+        }
+    </script>
+
+</body>
+</html>

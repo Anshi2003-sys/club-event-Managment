@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=device-width, initial-scale=1.0">
+    <title>Cultural Club – MZU</title>
+
+    <style>
+            body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+            color: #222;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: rgb(94, 191, 97);
+            padding: 15px 30px;
+        }
+
+        .navbar img {
+            height: 45px;
+            margin-right: 10px;
+        }
+
+        .navbar h2 {
+            margin: 0 30px 0 10px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin: 0 20px;
+            font-weight: 500;
+            margin-left: 60px;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        .user-section {
+            margin-left: auto;
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: rgb(94,191,97);
+            border-radius: 6px;
+            width: 180px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            color: black;
+        }
+
+        .user-section.active .dropdown-content {
+            display: block;
+        }
+
+
+
+        /* HERO BANNER */
+        .hero {
+            height: 360px;
+            background-image: url('{{ url_for("static", filename="images/cul1.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+        }
+
+        .hero-text {
+            position: absolute;
+            bottom: 30px;
+            left: 50px;
+            color: white;
+        }
+        .hero-text h1 {
+            font-size: 52px;
+            margin: 0;
+            font-weight: 800;
+            text-shadow: 0 0 10px black;
+        }
+
+        /* ABOUT SECTION */
+        .section {
+            width: 85%;
+            margin: 60px auto;
+        }
+
+        .curved-box {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            border-left: 8px solid rgb(94,191,97);
+        }
+
+        .section h2 {
+            font-size: 34px;
+            margin-bottom: 15px;
+            color: black;
+        }
+
+        .section p {
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        /* HIGHLIGHTS BLOCK */
+        .highlights {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .highlight-card {
+            background: linear-gradient(145deg, rgb(94,191,97));
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 2px solid black;
+        }
+
+        /* GALLERY */
+        .gallery {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 18px;
+            transition: transform .3s;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .cta-btn {
+            background-color: rgb(94,191,97);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 16px 34px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgb(94 191 97 / 20%);
+        }
+        .cta-btn:hover { background-color: #208d3f; }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}">
+        <h2>Campus Connect</h2>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('join_club') }}">Join Club</a>
+        <a href="{{ url_for('book_event') }}">Book Event</a>
+
+        {% if user %}
+        <div class="user-section" id="userMenu">
+            <span>👤 {{ user }} ▼</span>
+            <div class="dropdown-content">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login / Register</a>
+        {% endif %}
+    </div>
+
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Cultural Club </h1>
+        </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <div class="section">
+        <h2>About Cultural Club</h2>
+
+        <div class="curved-box">
+            <p>
+                The Cultural Club of Mizoram University celebrates diversity, creativity, and 
+                tradition through various artistic and cultural activities.  
+                We provide a platform for students to showcase talents in dance, music, theatre, art,  
+                literature, and traditional cultural forms.
+            </p>
+
+            <p>
+                Our mission is to preserve cultural values, promote creativity, and create 
+                a vibrant campus environment through festivals, competitions, workshops, and performances.
+            </p>
+        </div>
+    </div>
+
+    <!-- HIGHLIGHTS SECTION -->
+    <div class="section">
+        <h2>✨ Club Highlights</h2>
+
+        <div class="highlights">
+            <div class="highlight-card">Annual Cultural Fest</div>
+            <div class="highlight-card">Music & Dance Performances</div>
+            <div class="highlight-card">Drama & Theatre Workshops</div>
+            <div class="highlight-card">Traditional Art & Craft Events</div>
+            <div class="highlight-card">Talent Hunt Shows</div>
+        </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="section">
+        <h2>📸 Cultural Moments</h2>
+
+        <div class="gallery">
+            <img src="{{ url_for('static', filename='images/ass1.jpeg') }}">
+            <img src="{{ url_for('static', filename='images/cul1.jpg') }}">
+            <img src="{{ url_for('static', filename='images/bi3.jpeg') }}">
+            
+        </div>
+    </div>
+
+     <div class="cta-box">
+        <button class="cta-btn" onclick="window.location.href='{{ url_for('join_club') }}'">Join Club</button>
+    </div>
+
+    <script>
+        // Navbar Dropdown
+        const userMenu = document.getElementById("userMenu");
+        if (userMenu) {
+            userMenu.addEventListener("click", function() {
+                this.classList.toggle("active");
+            });
+        }
+    </script>
+
+</body>
+</html>

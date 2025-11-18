@@ -54,6 +54,7 @@ def init_db():
         capacity INTEGER DEFAULT 0,
         booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(username, event_name)
+    
     )''')
 
     conn.commit()
@@ -88,6 +89,49 @@ def contact():
 def past():
     return render_template('past.html', user=session.get('user'))
 
+@app.route('/redribbon')
+def redribbon():
+    return render_template('redribbon.html', user=session.get('user'))
+
+@app.route('/chess')
+def chess():
+    return render_template('chess.html', user=session.get('user'))
+
+@app.route('/adventure')
+def adventure():
+    return render_template('adventure.html', user=session.get('user'))
+
+@app.route('/cultural')
+def cultural():
+    return render_template('cultural.html', user=session.get('user'))
+
+@app.route('/literatureclub')
+def literatureclub():
+    return render_template('literatureclub.html', user=session.get('user'))
+
+@app.route('/freshers')
+def freshers():
+    return render_template('freshers.html', user=session.get('user'))
+
+@app.route('/upcomingworkshop')
+def upcomingworkshop():
+    return render_template('upcomingworkshop.html', user=session.get('user'))
+
+@app.route('/upcomingchristmas')
+def upcomingchristmas():
+    return render_template('upcomingchristmas.html', user=session.get('user'))
+
+@app.route('/upcomingnewyear')
+def upcomingnewyear():
+    return render_template('upcomingnewyear.html', user=session.get('user'))
+
+@app.route('/pastworkshop')
+def pastworkshop():
+    return render_template('pastworkshop.html', user=session.get('user'))
+
+@app.route('/pastbootcamp')
+def pastbootcamp():
+    return render_template('pastbootcamp.html', user=session.get('user'))
 
 
 # ------------------ Auth ------------------
@@ -145,7 +189,7 @@ def admin_dashboard():
     conn = get_db_connection()
 
     # Fetch all data
-    users = conn.execute("SELECT username, email FROM users").fetchall()
+    users = conn.execute("SELECT id,username, email FROM users").fetchall()
     book_events = conn.execute("SELECT * FROM event_bookings").fetchall()
     club_joins = conn.execute("SELECT * FROM club_members").fetchall()
 
@@ -159,8 +203,6 @@ def admin_dashboard():
         book_events=book_events,
         club_joins=club_joins
     )
-
-
 
 # ----------------------------- Register -----------------------------
 @app.route('/register', methods=['GET', 'POST'])

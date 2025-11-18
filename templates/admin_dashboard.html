@@ -54,11 +54,31 @@
 
   <h1>Admin Dashboard</h1>
 
+   <div class="section">
+  <h2>👤 Registered Users</h2>
+  <table>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Email</th>
+    </tr>
+    {% for usr in users %}
+    <tr>
+      <td>{{ usr['id'] }}</td>
+      <td>{{ usr['username'] }}</td>
+      <td>{{ usr['email'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+
   <div class="section">
     <h2>📅 Booked Events</h2>
     <table>
       <tr>
         <th>ID</th>
+        <th>Username</th>
         <th>Event Name</th>
         <th>Date</th>
         <th>Time</th>
@@ -67,10 +87,13 @@
         <th>Participants</th>
         <th>Contact</th>
         <th>Email</th>
+        
+
       </tr>
       {% for event in book_events %}
       <tr>
         <td>{{ event['id'] }}</td>
+        <td>{{ event['username'] }}</td>
         <td>{{ event['event_name'] }}</td>
         <td>{{ event['event_date'] }}</td>
         <td>{{ event['event_time'] }}</td>
@@ -89,6 +112,7 @@
     <table>
       <tr>
         <th>ID</th>
+        <th>Username</th>
         <th>Club</th>
         <th>Members</th>
         <th>Group Name</th>
@@ -96,10 +120,13 @@
         <th>Email</th>
         <th>Reason</th>
         <th>Joined At</th>
+        
+
       </tr>
       {% for club in club_joins %}
       <tr>
         <td>{{ club['id'] }}</td>
+        <td>{{ club['username'] }}</td>
         <td>{{ club['club'] }}</td>
         <td>{{ club['members'] }}</td>
         <td>{{ club['group_name'] }}</td>
@@ -107,6 +134,7 @@
         <td>{{ club['email'] }}</td>
         <td>{{ club['reason'] }}</td>
         <td>{{ club['joined_at'] }}</td>
+      </td>
       </tr>
       {% endfor %}
     </table>
